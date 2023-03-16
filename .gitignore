@@ -1,0 +1,5 @@
+note.txt
+node_modules
+venv
+htmlcov
+__pycache__
