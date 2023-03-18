@@ -78,7 +78,7 @@ const Header = () => {
               variant="outlined"
               className={classes.link}
               component={NavLink}
-              to="/logout"
+              to="/auth/logout"
             >
               Logout
             </Button>

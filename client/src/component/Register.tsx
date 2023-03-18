@@ -9,6 +9,8 @@ import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
+import { useNavigate } from "react-router-dom";
+import axiosInstance from "../utils/axios";
 
 function Copyright(props: any) {
   return (
@@ -29,13 +31,40 @@ function Copyright(props: any) {
 }
 
 export default function Register() {
+  const navigate = useNavigate();
+  const initialFormData = Object.freeze({
+    email: "",
+    firstname: "",
+    lastname: "",
+    password: "",
+  });
+
+  const [formData, setFormData] = React.useState(initialFormData);
+
+  const handleChange = (e: { target: { name: any; value: string } }) => {
+    setFormData({
+      ...formData,
+      // Trimming any whitespace
+      [e.target.name]: e.target.value.trim(),
+    });
+  };
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    axiosInstance
+      .post("user/create/", {
+        email: formData.email,
+        user_name: formData.firstname + " " + formData.lastname,
+        password: formData.password,
+      })
+      .then((res) => {
+        console.log(res);
+        console.log(res.data);
+        navigate("/auth/login");
+      })
+      .catch((error: any) => {
+        console.log(error.response.data);
+      });
   };
 
   return (
@@ -59,22 +88,23 @@ export default function Register() {
             <Grid item xs={12} sm={6}>
               <TextField
                 autoComplete="given-name"
-                name="firstName"
+                name="firstname"
                 required
                 fullWidth
-                id="firstName"
+                id="firstname"
                 label="First Name"
                 autoFocus
+                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                required
                 fullWidth
-                id="lastName"
+                id="lastname"
                 label="Last Name"
-                name="lastName"
+                name="lastname"
                 autoComplete="family-name"
+                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12}>
@@ -85,6 +115,7 @@ export default function Register() {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12}>
@@ -96,6 +127,7 @@ export default function Register() {
                 type="password"
                 id="password"
                 autoComplete="new-password"
+                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12}>
