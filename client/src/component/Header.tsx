@@ -15,6 +15,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
+import { useNavigate } from "react-router-dom";
 
 const pages = ["Products", "Pricing", "Blog"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
@@ -63,6 +64,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const Header = () => {
   const [searchData, setSearchData] = React.useState("");
+  const navigate = useNavigate()
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -86,8 +88,14 @@ const Header = () => {
   };
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    console.log("hello");
+    navigate({
+      pathname: '/search/',
+			search: '?search=' + searchData,
+    })
+    window.location.reload();
+    setSearchData("")
   };
+
   return (
     <AppBar position="fixed">
       <Container maxWidth="xl">
