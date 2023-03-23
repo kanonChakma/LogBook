@@ -3,6 +3,7 @@ import { Navigate, useRoutes } from "react-router";
 import Login from "./component/Login";
 import Logout from "./component/Logout";
 import Register from "./component/Register";
+import SinglePost from "./component/SinglePost";
 import AuthLayout from "./pages/AuthLayout";
 import Home from "./pages/Home";
 import MainLayout from "./pages/MainLayout";
@@ -16,7 +17,7 @@ const App: React.FC = (): JSX.Element => {
       { path: "*", element: <Navigate to="/404" /> },
       { path: "/", element: <Home /> },
       { path: "404", element: <PageNotFoundView /> },
-      { path: "account", element: <Navigate to="/account/list" /> },
+      { path: "post/:slug", element: <SinglePost /> },
     ],
   };
 

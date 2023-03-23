@@ -7,7 +7,7 @@ const MainLayout: React.FC = (): JSX.Element => {
   return (
     <>
       <Header />
-      <div style={{ minHeight: "50vh", marginTop: "20px" }}>
+      <div style={{ minHeight: "100vh" }}>
         <Outlet />
       </div>
       <Footer />
