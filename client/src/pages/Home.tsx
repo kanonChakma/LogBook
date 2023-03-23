@@ -1,6 +1,7 @@
 import { Box, Container } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Posts from "../component/Posts";
+import Tabss from "../component/Tabs";
 import axiosInstance from "../utils/axios";
 
 const Home = () => {
@@ -15,6 +16,7 @@ const Home = () => {
   return (
     <Container maxWidth="xl">
       <Box sx={{ marginTop: "200px" }}>
+        <Tabss/>
         <Posts posts={posts} />
       </Box>
     </Container>

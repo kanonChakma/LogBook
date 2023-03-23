@@ -1,17 +1,17 @@
 from blog.models import Post
-from django.shortcuts import get_object_or_404
-from rest_framework import generics, viewsets
+
+# from django.shortcuts import get_object_or_404
+from rest_framework import generics
+
 from rest_framework.permissions import (
     SAFE_METHODS,
     BasePermission,
-    DjangoModelPermissions,
-    DjangoModelPermissionsOrAnonReadOnly,
-    IsAdminUser,
     IsAuthenticatedOrReadOnly,
+    IsAuthenticated,
 )
-from rest_framework.response import Response
 
 from .serailizers import PostSerializer
+from rest_framework import filters
 
 
 class PostUserUpdatePermission(BasePermission):
@@ -24,6 +24,14 @@ class PostUserUpdatePermission(BasePermission):
         return obj.author == request.user
 
 
+class PostListDetailfilter(generics.ListAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ["slug"]
+
+
 class PostList(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Post.objects.all()
@@ -32,15 +40,15 @@ class PostList(generics.ListCreateAPIView):
 
 class PostDetail(generics.ListAPIView):
     serializer_class = PostSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
-        user = self.request.user
         slug = self.kwargs["slug"]
         return Post.objects.filter(slug=slug)
 
 
-class AutorPost(generics.ListAPIView):
-    # permission_classes = [IsAuthenticatedOrReadOnly]
+class AutorPost(generics.ListAPIView, PostUserUpdatePermission):
+    permission_classes = [PostUserUpdatePermission]
     serializer_class = PostSerializer
 
     def get_queryset(self):
@@ -49,56 +57,25 @@ class AutorPost(generics.ListAPIView):
         return Post.objects.filter(author=user.id)
 
 
-""""
-# Model Viewset
-class ModelPostList(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticatedOrReadOnly]
-    serializer_class = PostSerializer
-
-    def get_object(self, queryset=None, **kwargs):
-        item = self.kwargs.get("pk")
-        return get_object_or_404(Post, slug=item)
-
-    def get_queryset(self):
-        return Post.objects.all()
-
-
-# View set
-class ViewSetPostList(viewsets.ViewSet):
-    permission_classes = [IsAuthenticatedOrReadOnly]
-    queryset = Post.objects.all()
-
-    def list(self, request):
-        serializer_class = PostSerializer(self.queryset, many=True)
-        return Response(serializer_class.data)
-
-    def retrieve(self, request, pk=None):
-        post = get_object_or_404(self.queryset, pk=pk)
-        serializer_class = PostSerializer(post)
-        return Response(serializer_class.data)
-
-
-# def list(self, request):
-# def create(self, request):
-# def retrieve(self, request, pk=None):
-# def update(self, request, pk=None):
-# def partial_update(self, request, pk=None):
-# def destroy(self, request, pk=None):
-"""
-
-"""
-# Generic View
-class PostList(generics.ListCreateAPIView):
-    # permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
-    permission_classes = [IsAuthenticatedOrReadOnly]
+class CreatePost(generics.CreateAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
 
-class PostDetail(
-    generics.RetrieveUpdateDestroyAPIView, PostUserUpdatePermission
-):
-    permission_classes = [PostUserUpdatePermission]
+class SinglePost(generics.RetrieveAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-"""
+
+
+class EditPost(generics.UpdateAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+
+class DeletePost(generics.DestroyAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
