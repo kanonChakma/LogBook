@@ -70,7 +70,7 @@ const Footer: React.FC = (): JSX.Element => {
   const classes = useStyles();
   return (
     <>
-      <Container maxWidth="xl" className={classes.footer}>
+      <Container maxWidth="lg" className={classes.footer}>
         <Grid container spacing={4} justifyContent="space-evenly">
           {footers.map((footer) => (
             <Grid item xs={6} sm={3} key={footer.title}>

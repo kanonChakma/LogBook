@@ -15,7 +15,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const pages = ["Products", "Pricing", "Blog"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
@@ -23,9 +23,9 @@ const settings = ["Profile", "Account", "Dashboard", "Logout"];
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  backgroundColor: alpha(theme.palette.common.black, 0.15),
   "&:hover": {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
+    backgroundColor: alpha(theme.palette.common.black, 0.25),
   },
   marginRight: 50,
   width: "100%",
@@ -98,7 +98,7 @@ const Header = () => {
 
   return (
     <AppBar position="fixed">
-      <Container maxWidth="xl">
+      <Container maxWidth="lg">
         <Toolbar>
           <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
           <Typography
@@ -186,7 +186,7 @@ const Header = () => {
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
+                sx={{ my: 2, color: "#4B5563", display: "block" }}
               >
                 {page}
               </Button>
@@ -220,9 +220,19 @@ const Header = () => {
                 flexGrow: 1,
                 display: { xs: "none", md: "flex" },
                 marginRight: "30px",
+                color:"white"
               }}
             >
-              <Button color="inherit">Login</Button>
+              <Button>
+                  <Link to="/auth/login" style={{ color:"#4B5563", textDecoration:"none"}}>
+                    Login  
+                  </Link>
+                </Button>
+              <Button>
+                 <Link to="/auth/register"  style={{ color:"#4B5563", textDecoration:"none"}}>
+                    Register  
+                  </Link>
+              </Button>
             </Box>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>

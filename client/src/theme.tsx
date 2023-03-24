@@ -11,5 +11,13 @@ export const theme = createTheme({
         },
       },
     },
+    MuiAppBar: {
+      styleOverrides: {
+        colorPrimary: {
+          backgroundColor: "transparent",
+          color: "rgb(75 85 99)"
+        }
+      }
+    }
   },
 });
