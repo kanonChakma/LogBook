@@ -50,15 +50,19 @@ export default function Login() {
 
   return (
     <>
-      <Box
+      <Grid
         sx={{
-          marginTop: 8,
+          width: {'md': 450, xs:'auto'},
+          marginTop:{'md': 30, xs:20},
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          color:"#4B5563",
+          boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
+          padding:"2rem 3rem"
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+        <Avatar sx={{ m: 1, bgcolor: "secondary.primary" }}>
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
@@ -87,10 +91,6 @@ export default function Login() {
             onChange={handleChange}
             autoComplete="current-password"
           />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
           <Button
             type="submit"
             fullWidth
@@ -101,18 +101,18 @@ export default function Login() {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
+              <Link href="#" variant="body2" color="#4B5563">
                 Forgot password?
               </Link>
             </Grid>
             <Grid item>
-              <Link href="/auth/register" variant="body2">
+              <Link href="/auth/register" variant="body2" color="#4B5563">
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
           </Grid>
         </Box>
-      </Box>
+      </Grid>
       {/* <Copyright sx={{ mt: 8, mb: 4 }} /> */}
     </>
   );

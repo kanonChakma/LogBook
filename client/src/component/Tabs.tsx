@@ -1,40 +1,106 @@
-import { Box, Tab, Tabs } from '@mui/material';
-import { blue, red } from '@mui/material/colors';
-import { SetStateAction, useState } from 'react';
+import React, { Component } from "react";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
+import Typography from '@mui/material/Typography';
+import {Grid} from '@mui/material'
 
-const Tabss = () => {
-  const [tabIndex, setTabIndex] = useState(0);
 
-  const handleTabChange = (event: any, newTabIndex: SetStateAction<number>) => {
-    setTabIndex(newTabIndex);
-  };
 
-  return (
-    <Box>
-      <Box>
-      <Tabs
-        value={tabIndex}
-        onChange={handleTabChange}
-        variant="scrollable"
-        scrollButtons={true}
-        textColor="secondary"
-        indicatorColor="primary"
-        >
-        <Tab label="Tab 1" />
-        <Tab label="Tab 2" />
-        <Tab label="Tab 3" />
-        <Tab label="Tab 4" />
-        <Tab label="Tab 5" />
-        <Tab label="Tab 6" />
-        <Tab label="Tab 7" />
-        <Tab label="Tab 8" />
-        <Tab label="Tab 9" />
-        <Tab label="Tab 10" />
-        </Tabs>
-      </Box>
-      <hr/>
-    </Box>
-  );
+export default class Responsive extends Component {
+  render() {
+    var settings = {
+      dots: false,
+      infinite: true,
+      speed: 2000,
+      slidesToShow: 3,
+      slidesToScroll: 1,
+      initialSlide: 0,
+      variableWidth: true,
+      autoplay: true,
+      autoplaySpeed: 4000,
+      responsive: [
+        {
+          breakpoint: 1024,
+          settings: {
+            slidesToShow: 3,
+            slidesToScroll: 3,
+            infinite: true,
+            dots: true
+          }
+        },
+        {
+          breakpoint: 600,
+          settings: {
+            slidesToShow: 2,
+            slidesToScroll: 2,
+            initialSlide: 2
+          }
+        },
+        {
+          breakpoint: 480,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1
+          }
+        }
+      ]
+    };
+    const tabss =[
+      {
+        name: "hello1",
+        id: 1
+      },
+      {
+        name: "hello2",
+        id: 2
+      },
+      {
+        name: "hello3",
+        id: 3
+      },
+      {
+        name: "hello4",
+        id: 4
+      },
+      {
+       name: "hello5",
+       id: 5
+      },
+      {
+        name: "hello6",
+        id: 6
+      },
+      {
+        name: "hello7",
+        id: 7
+      },
+      {
+        name: "hello8",
+        id: 8
+      },
+    ]
+    return (
+      <Grid maxWidth="lg"
+      sx={{
+        position:'fixed',
+        zIndex: 1000
+       }}
+      >
+         <Grid
+         >
+          <Slider {...settings}>
+            {
+              tabss.map((v)=>(
+               <div key={v.id} style={{width:"100px", cursor: "pointer"}}>
+                   <h3 style={{cursor: "pointer"}}>{v.name}</h3>
+               </div>
+              ))
+            }
+        </Slider>
+         </Grid>
+         <hr/>
+      </Grid>
+    );
+  }
 }
-
-export default Tabss;

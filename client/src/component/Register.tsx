@@ -71,10 +71,14 @@ export default function Register() {
     <>
       <Box
         sx={{
-          marginTop: 8,
+          width: {'md': 450, xs:'auto'},
+          marginTop:{'md': 30, xs:20},
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          color:"#4B5563",
+          boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
+          padding:"2rem 3rem"
         }}
       >
         <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
@@ -128,12 +132,6 @@ export default function Register() {
                 id="password"
                 autoComplete="new-password"
                 onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
               />
             </Grid>
           </Grid>

@@ -14,7 +14,7 @@ const Home = () => {
     });
   }, []);
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth="lg">
       <Box sx={{ marginTop: "200px" }}>
         <Tabss/>
         <Posts posts={posts} />
