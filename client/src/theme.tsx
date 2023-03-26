@@ -2,6 +2,10 @@ import { createTheme } from "@mui/material";
 
 export const theme = createTheme({
   palette: {},
+  zIndex: {
+    appBar: 1251,
+    modal: 1250,
+  },
   components: {
     MuiToolbar: {
       styleOverrides: {
@@ -14,10 +18,10 @@ export const theme = createTheme({
     MuiAppBar: {
       styleOverrides: {
         colorPrimary: {
-          backgroundColor: "transparent",
-          color: "rgb(75 85 99)"
-        }
-      }
-    }
+          backgroundColor: "white",
+          color: "rgb(75 85 99)",
+        },
+      },
+    },
   },
 });

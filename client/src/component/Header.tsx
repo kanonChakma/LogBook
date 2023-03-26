@@ -17,7 +17,7 @@ import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-const pages = ["Products", "Pricing", "Blog"];
+const pages = ["Home", "About", "Contact", "Write"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 const Search = styled("div")(({ theme }) => ({
@@ -64,7 +64,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const Header = () => {
   const [searchData, setSearchData] = React.useState("");
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -89,11 +89,11 @@ const Header = () => {
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     navigate({
-      pathname: '/search/',
-			search: '?search=' + searchData,
-    })
+      pathname: "/search/",
+      search: "?search=" + searchData,
+    });
     window.location.reload();
-    setSearchData("")
+    setSearchData("");
   };
 
   return (
@@ -220,18 +220,32 @@ const Header = () => {
                 flexGrow: 1,
                 display: { xs: "none", md: "flex" },
                 marginRight: "30px",
-                color:"white"
+                color: "white",
               }}
             >
               <Button>
-                  <Link to="/auth/login" style={{ color:"#4B5563", textDecoration:"none"}}>
-                    Login  
-                  </Link>
-                </Button>
+                <Link
+                  to="/auth/login"
+                  style={{ color: "#4B5563", textDecoration: "none" }}
+                >
+                  Login
+                </Link>
+              </Button>
               <Button>
-                 <Link to="/auth/register"  style={{ color:"#4B5563", textDecoration:"none"}}>
-                    Register  
-                  </Link>
+                <Link
+                  to="/auth/logout"
+                  style={{ color: "#4B5563", textDecoration: "none" }}
+                >
+                  Logout
+                </Link>
+              </Button>
+              <Button>
+                <Link
+                  to="/auth/register"
+                  style={{ color: "#4B5563", textDecoration: "none" }}
+                >
+                  Register
+                </Link>
               </Button>
             </Box>
             <Tooltip title="Open settings">
