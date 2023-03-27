@@ -2,15 +2,13 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Checkbox from "@mui/material/Checkbox";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../utils/axios";
+import axiosInstance from "../common/axios";
 
 function Copyright(props: any) {
   return (
@@ -71,14 +69,14 @@ export default function Register() {
     <>
       <Box
         sx={{
-          width: {'md': 450, xs:'auto'},
-          marginTop:{'md': 30, xs:20},
+          width: { md: 450, xs: "auto" },
+          marginTop: { md: 30, xs: 20 },
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          color:"#4B5563",
+          color: "#4B5563",
           boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
-          padding:"2rem 3rem"
+          padding: "2rem 3rem",
         }}
       >
         <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>

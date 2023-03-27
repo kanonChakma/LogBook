@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../utils/axios";
+import axiosInstance from "../common/axios";
 
 const Logout: React.FC = () => {
   const navigate = useNavigate();

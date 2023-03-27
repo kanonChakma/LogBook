@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import axiosInstance from "../utils/axios";
+import axiosInstance from "../common/axios";
 
 const Category: React.FC = () => {
   const { category_name } = useParams();

@@ -8,7 +8,7 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../utils/axios";
+import axiosInstance from "../common/axios";
 
 export default function Login() {
   const navigate = useNavigate();

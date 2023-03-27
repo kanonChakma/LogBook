@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import { blue, red } from "@mui/material/colors";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import * as React from "react";
-import { AdminResponse } from "../../utils/Admin";
+import { AdminResponse } from "../../common/types";
 
 const MatEdit = ({ index, d }: { index: number; d: string }) => {
   const handleEditClick = () => {

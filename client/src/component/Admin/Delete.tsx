@@ -1,7 +1,7 @@
 import { Button, Container, Grid } from "@mui/material";
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import axiosInstance from "../../utils/axios";
+import axiosInstance from "../../common/axios";
 
 const Delete: React.FC = () => {
   const navigate = useNavigate();

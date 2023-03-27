@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
-import { CategoryType } from "../types/category";
-import axiosInstance from "../utils/axios";
+import axiosInstance from "../common/axios";
+import { CategoryType } from "../common/types";
 
 var settings = {
   dots: false,

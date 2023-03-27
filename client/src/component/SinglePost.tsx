@@ -13,9 +13,9 @@ import {
 import { makeStyles } from "@mui/styles";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import axiosInstance from "../common/axios";
+import { SinglePostType } from "../common/types";
 import cover from "../images/cover.jpg";
-import { SinglePostType } from "../types/posts";
-import axiosInstance from "../utils/axios";
 
 const useStyles = makeStyles((theme: Theme) => ({
   paper: {

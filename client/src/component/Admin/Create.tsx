@@ -11,7 +11,7 @@ import {
 import { makeStyles } from "@mui/styles";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../../utils/axios";
+import axiosInstance from "../../common/axios";
 
 const useStyles = makeStyles((theme: Theme) => ({
   paper: {

@@ -1,7 +1,7 @@
 import { Container, Grid } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import axiosInstance from "../common/axios";
 import AdminDashboard from "../component/Admin/DashBoard";
-import axiosInstance from "../utils/axios";
 
 const Admin: React.FC = () => {
   const [posts, setPosts] = useState([]);
