@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.models import (
     AbstractBaseUser,
     BaseUserManager,
@@ -34,6 +35,11 @@ class CustomAccountManager(BaseUserManager):
         return user
 
 
+def upload_to_path(instance: "NewUser", filename: str) -> str:
+    user_id: str = instance.id
+    return f"{settings.PROFILE_IMAGE_DIR_NAME}/{user_id}-{filename}"
+
+
 class NewUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_("email address"), unique=True)
     user_name = models.CharField(max_length=150, unique=True)
@@ -42,6 +48,9 @@ class NewUser(AbstractBaseUser, PermissionsMixin):
     about = models.TextField(_("about"), max_length=500, blank=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
+    profile_image = models.ImageField(
+        upload_to=upload_to_path, max_length=300, null=True, blank=True
+    )
 
     objects = CustomAccountManager()
 

@@ -1,18 +1,13 @@
-from blog.models import Category, Post
-
+from blog.models import Category, Comment, Post
 # from django.shortcuts import get_object_or_404
-from rest_framework import filters, generics
-from rest_framework.permissions import (
-    SAFE_METHODS,
-    AllowAny,
-    BasePermission,
-    IsAuthenticated,
-    IsAuthenticatedOrReadOnly,
-)
+from rest_framework import filters, generics, status
+from rest_framework.permissions import (SAFE_METHODS, AllowAny, BasePermission,
+                                        IsAuthenticated,
+                                        IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serailizers import CategorySerializer, PostSerializer
+from .serailizers import CategorySerializer, CommentSerializer, PostSerializer
 
 
 class PostUserUpdatePermission(BasePermission):
@@ -56,7 +51,7 @@ class AutorPost(generics.ListCreateAPIView):
         print(user)
         return Post.objects.filter(author=1)
 
-
+#admin
 class CreatePost(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Post.objects.all()
@@ -81,6 +76,7 @@ class DeletePost(generics.DestroyAPIView):
     serializer_class = PostSerializer
 
 
+#category
 class CategoryList(APIView):
     def get(self, request, format=None):
         category = Category.objects.all()
@@ -94,3 +90,103 @@ class CategoryList(APIView):
             posts = Post.objects.filter(category=category.id)
             serializer = PostSerializer(posts, many=True)
             return Response(serializer.data)
+
+#comments
+class CommentList(APIView):
+    def get(self, request, id):
+        comments = Comment.objects.filter(blog=id)
+        comment_serializer = CommentSerializer(instance=comments, many=True)
+        return Response(data=comment_serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request, id):
+        try:
+            post = Post.objects.get(pk=id)
+            data = {}
+            data["blog"] = str(post.id)
+            data["user"] = str(request.user.id)
+            data["content"] = request.data
+
+            comment_serializer = CommentSerializer(data=data)
+            if comment_serializer.is_valid():
+                return Response(
+                    data={
+                        "message": "Comment posted successfully",
+                        "comment": comment_serializer.data,
+                    },
+                    status=status.HTTP_201_CREATED,
+                )
+
+            return Response(
+                data=comment_serializer.data, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        except Post.DoesNotExist:
+            return Response(
+                data={"message": "Blog does not exist"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+
+class CommentDetail(APIView):
+    def put(self, request, comment_id, post_id):
+        try:
+            post = Post.objects.get(pk=post_id)
+            comment = Comment.objects.get(pk=comment_id)
+            if request.user.id != comment.user.id:
+                return Response(
+                    data={"message": "You are not authorized"},
+                    status=status.HTTP_401_UNAUTHORIZED,
+                )
+
+            comment_serializer = CommentSerializer(
+                instance=comment, data=request.data, partial=True
+            )
+            if comment_serializer.is_valid(raise_exception=True):
+                comment_serializer.save()
+                return Response(
+                    data={"message": "Comment updated successfully"},
+                    status=status.HTTP_200_OK,
+                )
+            return Response(
+                data=comment_serializer.errors, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        except (Post.DoesNotExist, Comment.DoesNotExist) as e:
+            if isinstance(e, Post.DoesNotExist):
+                return Response(
+                    data={"message": "Blog does not exist"},
+                    status=status.HTTP_404_NOT_FOUND,
+                )
+            else:
+                return Response(
+                    data={"message": "Comment does not exist"},
+                    status=status.HTTP_404_NOT_FOUND,
+                )
+
+    def delete(self, request, comment_id, post_id):
+        try:
+            post = Post.objects.get(pk=post_id)
+            comment = Comment.objects.get(pk=comment_id)
+            if request.user.id != comment.user.id:
+                return Response(
+                    data={"message": "Your are not authorized to delet"},
+                    status=status.HTTP_401_UNAUTHORIZED,
+                )
+
+            comment.delete()
+            return Response(
+                data={"message": "comment deleted successfully"},
+                status=status.HTTP_200_OK,
+            )
+
+        except (Post.DoesNotExist, Comment.DoesNotExist) as e:
+            if isinstance(e, Post.DoesNotExist):
+                return Response(
+                    data={"message": "Blog deos not exist"},
+                    status=status.HTTP_404_NOT_FOUND,
+                )
+            else:
+                return Response(
+                    data={"message": "Comment does not exist"},
+                    status=status.HTTP_404_NOT_FOUND,
+                )
