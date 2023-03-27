@@ -1,9 +1,15 @@
 from blog.models import Category, Comment, Post
+
 # from django.shortcuts import get_object_or_404
 from rest_framework import filters, generics, status
-from rest_framework.permissions import (SAFE_METHODS, AllowAny, BasePermission,
-                                        IsAuthenticated,
-                                        IsAuthenticatedOrReadOnly)
+from rest_framework.parsers import FormParser, MultiPartParser
+from rest_framework.permissions import (
+    SAFE_METHODS,
+    AllowAny,
+    BasePermission,
+    IsAuthenticated,
+    IsAuthenticatedOrReadOnly,
+)
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -51,11 +57,26 @@ class AutorPost(generics.ListCreateAPIView):
         print(user)
         return Post.objects.filter(author=1)
 
-#admin
-class CreatePost(generics.CreateAPIView):
+
+# admin
+class CreatePost(APIView):
     permission_classes = [IsAuthenticated]
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
+    parser_classes = [MultiPartParser, FormParser]
+
+    def post(self, request, format=None):
+        post_serializer = PostSerializer(data=request.data)
+        if post_serializer.is_valid():
+            post_serializer.save()
+            return Response(
+                data={
+                    "message": "Post created successfully",
+                    "posts": post_serializer.data,
+                },
+                status=status.HTTP_201_CREATED,
+            )
+        return Response(
+            data={"message": post_serializer.errors}, status=status.HTTP_400_BAD_REQUEST
+        )
 
 
 class SinglePost(generics.RetrieveAPIView):
@@ -76,7 +97,7 @@ class DeletePost(generics.DestroyAPIView):
     serializer_class = PostSerializer
 
 
-#category
+# category
 class CategoryList(APIView):
     def get(self, request, format=None):
         category = Category.objects.all()
@@ -91,7 +112,8 @@ class CategoryList(APIView):
             serializer = PostSerializer(posts, many=True)
             return Response(serializer.data)
 
-#comments
+
+# comments
 class CommentList(APIView):
     def get(self, request, id):
         comments = Comment.objects.filter(blog=id)
@@ -108,6 +130,7 @@ class CommentList(APIView):
 
             comment_serializer = CommentSerializer(data=data)
             if comment_serializer.is_valid():
+                comment_serializer.save()
                 return Response(
                     data={
                         "message": "Comment posted successfully",

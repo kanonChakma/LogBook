@@ -1,5 +1,3 @@
-import uuid
-
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
@@ -33,9 +31,7 @@ class Post(models.Model):
     content = models.TextField()
     slug = models.SlugField(max_length=250, unique_for_date="published")
     published = models.DateTimeField(default=timezone.now)
-    post_image = models.ImageField(
-        upload_to=upload_to_path, max_length=200, default="posts/default.jpg"
-    )
+    post_image = models.ImageField(upload_to=upload_to_path, default="cover.jpg")
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="blog_posts"
     )
@@ -55,7 +51,7 @@ class Comment(models.Model):
     content = models.TextField()
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
     user = models.ForeignKey(
-        settings.settings.AUTH_USER_MODEL,
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="comments",
     )
