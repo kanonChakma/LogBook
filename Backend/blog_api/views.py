@@ -13,6 +13,7 @@ from rest_framework.permissions import (
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from .pagination import PageNumberPagination
 from .serailizers import CategorySerializer, CommentSerializer, PostSerializer
 
 
@@ -37,6 +38,7 @@ class PostListDetailfilter(generics.ListAPIView):
 class PostList(generics.ListCreateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    pagination_class = PageNumberPagination
 
 
 class PostDetail(generics.ListAPIView):

@@ -15,7 +15,6 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axiosInstance from "../common/axios";
 import { SinglePostType } from "../common/types";
-import cover from "../images/cover.jpg";
 
 const useStyles = makeStyles((theme: Theme) => ({
   paper: {
@@ -34,6 +33,7 @@ const dataTpe = {
   slug: "",
   status: "",
   title: "",
+  post_image: "",
 } as SinglePostType;
 
 const SinglePost: React.FC = () => {
@@ -79,7 +79,7 @@ const SinglePost: React.FC = () => {
               width: "100%",
             }}
             alt="The house from the offer."
-            src={cover}
+            src={data?.post_image}
           />
         </Grid>
 

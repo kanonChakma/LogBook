@@ -99,6 +99,10 @@ const Tabs = () => {
       sx={{
         position: "fixed",
         zIndex: 1000,
+        height: "70px",
+        background: "white",
+        paddingTop: "20px",
+        marginBottom: "30px",
       }}
     >
       <Grid>

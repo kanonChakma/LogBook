@@ -21,6 +21,7 @@ class PostSerializer(serializers.ModelSerializer):
             "content",
             "status",
             "category",
+            "post_image",
             "category_name",
         )
         model = Post

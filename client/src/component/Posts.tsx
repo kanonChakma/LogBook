@@ -1,14 +1,10 @@
 import { Container, Grid } from "@mui/material";
 import React from "react";
+import { SinglePostType } from "../common/types";
 import Post from "./Post";
 
-export interface postInfo {
-  title: string;
-  excerpt: string;
-  slug: string;
-}
 interface PostType {
-  posts: postInfo[];
+  posts: SinglePostType[];
 }
 
 const Posts = ({ posts }: PostType) => {
@@ -16,14 +12,30 @@ const Posts = ({ posts }: PostType) => {
     <React.Fragment>
       <Container maxWidth="xl" component="main">
         <Grid container spacing={5} alignItems="flex-end">
-          {posts.map(({ title, excerpt, slug }) => (
-            <Post
-              key={`${title}+1`}
-              title={title}
-              excerpt={excerpt}
-              slug={slug}
-            />
-          ))}
+          {posts.map(
+            ({
+              title,
+              excerpt,
+              slug,
+              post_image,
+              category_name,
+              author_name,
+              content,
+              author_profile_image,
+            }) => (
+              <Post
+                key={`${title}+1`}
+                title={title}
+                excerpt={excerpt}
+                slug={slug}
+                post_image={post_image}
+                category_name={category_name}
+                author_name={author_name}
+                content={content}
+                author_profile_image={author_profile_image}
+              />
+            )
+          )}
         </Grid>
       </Container>
     </React.Fragment>

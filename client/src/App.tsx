@@ -3,7 +3,7 @@ import { Navigate, useRoutes } from "react-router";
 import Create from "./component/Admin/Create";
 import Delete from "./component/Admin/Delete";
 import Edit from "./component/Admin/Edit";
-import Category from "./component/Category";
+import Category from "./component/Category/Category";
 import Login from "./component/Login";
 import Logout from "./component/Logout";
 import Register from "./component/Register";
@@ -24,7 +24,7 @@ const App: React.FC = (): JSX.Element => {
       { path: "/", element: <Home /> },
       { path: "/search", element: <Search /> },
       { path: "404", element: <PageNotFoundView /> },
-      { path: "post/:slug", element: <SinglePost /> },
+      { path: "/post/:slug", element: <SinglePost /> },
       { path: "category/:category_name", element: <Category /> },
       { path: "*", element: <Navigate to="/404" /> },
     ],
