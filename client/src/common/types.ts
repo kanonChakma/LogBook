@@ -33,3 +33,12 @@ export interface AdminResponse {
   status: string;
   title: string;
 }
+
+export interface CommentType {
+  content:string;
+  created_at:string;
+  id:number;
+  post:number;
+  user:number;
+  user_profile_image: string
+}
