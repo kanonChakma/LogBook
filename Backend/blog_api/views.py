@@ -5,7 +5,6 @@ from rest_framework import filters, generics, status
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import (
     SAFE_METHODS,
-    AllowAny,
     BasePermission,
     IsAuthenticated,
     IsAuthenticatedOrReadOnly,
@@ -117,19 +116,19 @@ class CategoryList(APIView):
 
 # comments
 class CommentList(APIView):
-    def get(self, request, id):
-        comments = Comment.objects.filter(blog=id)
+    def get(self, request, post_id):
+        comments = Comment.objects.filter(post=post_id)
         comment_serializer = CommentSerializer(instance=comments, many=True)
         return Response(data=comment_serializer.data, status=status.HTTP_200_OK)
 
-    def post(self, request, id):
+    def post(self, request, post_id):
         try:
-            post = Post.objects.get(pk=id)
+            post = Post.objects.get(pk=post_id)
             data = {}
-            data["blog"] = str(post.id)
+            data["post"] = str(post.id)
             data["user"] = str(request.user.id)
             data["content"] = request.data
-
+            print(data)
             comment_serializer = CommentSerializer(data=data)
             if comment_serializer.is_valid():
                 comment_serializer.save()

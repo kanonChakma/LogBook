@@ -11,4 +11,9 @@ class AuthorAdmin(admin.ModelAdmin):
     }
 
 
+@admin.register(models.Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ("id", "content", "user", "post", "created_at")
+
+
 admin.site.register(models.Category)
