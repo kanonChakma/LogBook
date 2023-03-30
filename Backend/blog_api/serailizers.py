@@ -34,7 +34,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    user_username = serializers.CharField(source="user. user_name", read_only=True)
+    user_username = serializers.CharField(source="user.user_name", read_only=True)
     user_profile_image = serializers.ImageField(
         source="user.profile_image", read_only=True
     )

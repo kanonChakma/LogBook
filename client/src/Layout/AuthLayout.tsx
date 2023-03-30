@@ -8,7 +8,7 @@ const AuthLayout: React.FC = (): JSX.Element => {
     <>
       <Header />
       <div>
-        <Container component="main" maxWidth="xs">
+        <Container component="main" maxWidth="lg">
           <CssBaseline />
           <Outlet />
         </Container>

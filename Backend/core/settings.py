@@ -124,7 +124,7 @@ PROFILE_IMAGE_DIR_NAME = "profileimages"
 POST_IMAGE_DIR_NAME = "blogcoverimages"
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=5),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=30),
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
@@ -137,3 +137,13 @@ SIMPLE_JWT = {
     "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
     "TOKEN_TYPE_CLAIM": "token_type",
 }
+
+LANGUAGE_CODE = "en-us"
+
+TIME_ZONE = "Asia/Dhaka"
+
+USE_I18N = True
+
+USE_L10N = True
+
+USE_TZ = True

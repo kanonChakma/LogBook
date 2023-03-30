@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = "http://127.0.0.1:8000/api/";
+export const baseURL = "http://127.0.0.1:8000/api/";
 
 const axiosInstance = axios.create({
   baseURL: baseURL,
@@ -34,7 +34,7 @@ axiosInstance.interceptors.response.use(
       error.response.status === 401 &&
       originalRequest.url === baseURL + "token/refresh/"
     ) {
-      window.location.href = "/login/";
+      window.location.href = "/auth/login/";
       return Promise.reject(error);
     }
 
@@ -46,16 +46,17 @@ axiosInstance.interceptors.response.use(
       const refreshToken = localStorage.getItem("refresh_token");
 
       if (refreshToken) {
-        const tokenParts = JSON.parse(atob(refreshToken.split(".")[1]));
-
+        const tokenParts = JSON.parse(window.atob(refreshToken.split(".")[1]));
+        //const tokenParts = JSON.parse(Buffer.from(refreshToken.split(".")[1], "base64"))
         // exp date in token is expressed in seconds, while now() returns milliseconds:
         const now = Math.ceil(Date.now() / 1000);
         console.log(tokenParts.exp);
 
         if (tokenParts.exp > now) {
-          return axiosInstance
-            .post("/token/refresh/", { refresh: refreshToken })
+          return axios
+            .post("api/token/refresh/", { refresh: refreshToken })
             .then((response) => {
+              console.log(response);
               localStorage.setItem("access_token", response.data.access);
               localStorage.setItem("refresh_token", response.data.refresh);
 
@@ -71,11 +72,11 @@ axiosInstance.interceptors.response.use(
             });
         } else {
           console.log("Refresh token is expired", tokenParts.exp, now);
-          window.location.href = "/login/";
+          window.location.href = "auth/login/";
         }
       } else {
         console.log("Refresh token not available.");
-        window.location.href = "/login/";
+        window.location.href = "/auth/login/";
       }
     }
 

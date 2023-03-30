@@ -1,7 +1,7 @@
 import {
+  Box,
   Button,
   Container,
-  CssBaseline,
   Grid,
   TextField,
   Theme,
@@ -42,7 +42,7 @@ const Create: React.FC = () => {
   const [formData, updateFormData] = useState(initialFormData);
 
   useEffect(() => {
-    axiosInstance.get("admin/edit/postdetail/" + id).then((res) => {
+    axiosInstance.get("admin/post/" + id).then((res) => {
       updateFormData({
         ...formData,
         ["title" as string]: res.data.title,
@@ -81,82 +81,101 @@ const Create: React.FC = () => {
   const classes = useStyles();
 
   return (
-    <Container component="main" maxWidth="sm">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Typography component="h1" variant="h5">
-          Edit Post
-        </Typography>
-        <form className={classes.form} onSubmit={handleSubmit} noValidate>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="title"
-                label="Post Title"
-                name="title"
-                autoComplete="title"
-                value={formData.title}
-                onChange={handleChange}
-              />
+    <Container maxWidth="md">
+      <Grid
+        container
+        direction="column"
+        alignItems="center"
+        justifyContent="center"
+        style={{ minHeight: "100vh", marginTop: "30px" }}
+      >
+        <Grid
+          item
+          gap={3}
+          sx={{
+            boxShadow:
+              "rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px",
+            padding: "30px",
+            textAlign: "center",
+          }}
+        >
+          <Typography component="h1" variant="h5">
+            Edit Post
+          </Typography>
+          <form className={classes.form} onSubmit={handleSubmit} noValidate>
+            <Grid container gap={3}>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="title"
+                  label="Post Title"
+                  name="title"
+                  autoComplete="title"
+                  value={formData.title}
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="excerpt"
+                  label="Post Excerpt"
+                  name="excerpt"
+                  autoComplete="excerpt"
+                  value={formData.excerpt}
+                  onChange={handleChange}
+                  multiline
+                  rows={8}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="slug"
+                  label="slug"
+                  name="slug"
+                  autoComplete="slug"
+                  value={formData.slug}
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="content"
+                  label="content"
+                  name="content"
+                  autoComplete="content"
+                  value={formData.content}
+                  onChange={handleChange}
+                  multiline
+                  rows={8}
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
+            <Box textAlign="center">
+              <Button
                 fullWidth
-                id="excerpt"
-                label="Post Excerpt"
-                name="excerpt"
-                autoComplete="excerpt"
-                value={formData.excerpt}
-                onChange={handleChange}
-                multiline
-                rows={8}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
+                type="submit"
+                sx={{ paddingY: 1, margin: "20px 0px" }}
                 variant="outlined"
-                required
-                fullWidth
-                id="slug"
-                label="slug"
-                name="slug"
-                autoComplete="slug"
-                value={formData.slug}
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="content"
-                label="content"
-                name="content"
-                autoComplete="content"
-                value={formData.content}
-                onChange={handleChange}
-                multiline
-                rows={8}
-              />
-            </Grid>
-          </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Update Post
-          </Button>
-        </form>
-      </div>
+                color="secondary"
+                className={classes.submit}
+              >
+                Update Post
+              </Button>
+            </Box>
+          </form>
+        </Grid>
+      </Grid>
     </Container>
   );
 };

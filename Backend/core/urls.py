@@ -7,6 +7,7 @@ from drf_yasg.views import get_schema_view as schema
 from rest_framework import permissions
 from rest_framework.schemas import get_schema_view
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from users.views import MyTokenObtainPairView
 
 schema_view = schema(
     openapi.Info(
@@ -27,7 +28,7 @@ urlpatterns = [
     path("api/", include("blog_api.urls", namespace="blog_api")),
     path("api/user/", include("users.urls", namespace="users")),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
-    path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("api/token/", MyTokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path(
         "schema/",

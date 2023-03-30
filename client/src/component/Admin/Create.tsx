@@ -1,17 +1,19 @@
 import {
-  Avatar,
   Button,
   Container,
-  CssBaseline,
   Grid,
   TextField,
   Theme,
   Typography,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
+import axios from "axios";
 import React, { useState } from "react";
+import "react-quill/dist/quill.snow.css";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../../common/axios";
+import { slugify } from "../../common/utils";
+import ImageUplaod from "../ImageUplaod";
+import TextEditor from "./TextEditor";
 
 const useStyles = makeStyles((theme: Theme) => ({
   paper: {
@@ -19,6 +21,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    padding: "50px",
+    boxShadow:
+      "rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px",
   },
   avatar: {
     margin: theme.spacing(1),
@@ -29,53 +34,33 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginTop: theme.spacing(3),
   },
   submit: {
-    margin: theme.spacing(3, 0, 2),
+    marginTop: "10px",
   },
 }));
 
 const Create: React.FC = () => {
-  function slugify(string: string) {
-    const a =
-      "àáâäæãåāăąçćčđďèéêëēėęěğǵḧîïíīįìłḿñńǹňôöòóœøōõőṕŕřßśšşșťțûüùúūǘůűųẃẍÿýžźż·/_,:;";
-    const b =
-      "aaaaaaaaaacccddeeeeeeeegghiiiiiilmnnnnoooooooooprrsssssttuuuuuuuuuwxyyzzz------";
-    const p = new RegExp(a.split("").join("|"), "g");
-
-    return string
-      .toString()
-      .toLowerCase()
-      .replace(/\s+/g, "-") // Replace spaces with -
-      .replace(p, (c) => b.charAt(a.indexOf(c))) // Replace special characters
-      .replace(/&/g, "-and-") // Replace & with 'and'
-      .replace(/[^\w\-]+/g, "") // Remove all non-word characters
-      .replace(/\-\-+/g, "-") // Replace multiple - with single -
-      .replace(/^-+/, "") // Trim - from start of text
-      .replace(/-+$/, ""); // Trim - from end of text
-  }
+  const [value, setValue] = useState("");
 
   const navigate = useNavigate();
   const initialFormData = Object.freeze({
     title: "",
     slug: "",
     excerpt: "",
-    content: "",
   });
 
-  const [formData, updateFormData] = useState(initialFormData);
+  const [postData, setPostData] = useState(initialFormData);
+  const [postimage, setPostImage] = useState<File | null>();
 
   const handleChange = (e: { target: { name: any; value: string } }) => {
-    // eslint-disable-next-line eqeqeq
-    if (e.target.name == "title") {
-      updateFormData({
-        ...formData,
-        // Trimming any whitespace
+    if (e.target.name === "title") {
+      setPostData({
+        ...postData,
         [e.target.name]: e.target.value.trim(),
         ["slug" as string]: slugify(e.target.value.trim()),
       });
     } else {
-      updateFormData({
-        ...formData,
-        // Trimming any whitespace
+      setPostData({
+        ...postData,
         [e.target.name]: e.target.value.trim(),
       });
     }
@@ -83,97 +68,126 @@ const Create: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(formData);
-    axiosInstance
-      .post(`admin/create/`, {
-        title: formData.title,
-        slug: formData.slug,
-        author: 1,
-        excerpt: formData.excerpt,
-        content: formData.content,
+    let userId = localStorage.getItem("userId");
+
+    let formData = new FormData();
+    formData.append("title", postData.title);
+    formData.append("slug", postData.slug);
+    formData.append("author", userId as string);
+    formData.append("excerpt", postData.excerpt);
+    formData.append("content", value);
+    if (postimage) {
+      formData.append("post_image", postimage);
+    }
+    axios
+      .post("http://127.0.0.1:8000/api/admin/post/", formData, {
+        headers: {
+          Authorization: localStorage.getItem("access_token")
+            ? "JWT " + localStorage.getItem("access_token")
+            : null,
+          "Content-Type": "multipart/form-data",
+        },
       })
       .then((res) => {
         navigate("/admin/");
+      })
+      .catch((err) => {
+        console.log(err);
       });
   };
 
   const classes = useStyles();
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}></Avatar>
-        <Typography component="h1" variant="h5">
-          Create New Post
-        </Typography>
-        <form onSubmit={handleSubmit} className={classes.form} noValidate>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="title"
-                label="Post Title"
-                name="title"
-                autoComplete="title"
-                onChange={handleChange}
-              />
+    <Container maxWidth="lg">
+      <Grid
+        container
+        alignItems="center"
+        justifyContent="center"
+        style={{
+          minHeight: "100vh",
+        }}
+      >
+        <Grid
+          item
+          xs={12}
+          md={10}
+          gap={3}
+          sx={{
+            boxShadow:
+              "rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px",
+            padding: " 50px 30px",
+            textAlign: "center",
+          }}
+        >
+          <Typography component="h1" variant="h5">
+            Create New Post
+          </Typography>
+          <form onSubmit={handleSubmit} className={classes.form} noValidate>
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="title"
+                  label="Post Title"
+                  name="title"
+                  autoComplete="title"
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="slug"
+                  label="slug"
+                  name="slug"
+                  autoComplete="slug"
+                  value={postData.slug}
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="excerpt"
+                  label="Post Excerpt"
+                  name="excerpt"
+                  autoComplete="excerpt"
+                  onChange={handleChange}
+                  multiline
+                  rows={4}
+                />
+              </Grid>
+              <Grid item xs={12} mb={5}>
+                <TextEditor value={value} setValue={setValue} />
+              </Grid>
+              <Grid item xs={12}>
+                <ImageUplaod
+                  postimage={postimage}
+                  setPostImage={setPostImage}
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="excerpt"
-                label="Post Excerpt"
-                name="excerpt"
-                autoComplete="excerpt"
-                onChange={handleChange}
-                multiline
-                rows={4}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="slug"
-                label="slug"
-                name="slug"
-                autoComplete="slug"
-                value={formData.slug}
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="content"
-                label="content"
-                name="content"
-                autoComplete="content"
-                onChange={handleChange}
-                multiline
-                rows={4}
-              />
-            </Grid>
-          </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Create Post
-          </Button>
-        </form>
-      </div>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              style={{
+                marginTop: "30px",
+              }}
+            >
+              Create Post
+            </Button>
+          </form>
+        </Grid>
+      </Grid>
     </Container>
   );
 };

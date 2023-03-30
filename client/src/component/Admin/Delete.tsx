@@ -20,7 +20,7 @@ const Delete: React.FC = () => {
           console.log(error.response.headers);
         }
       })
-      .then(function () {
+      .then(() => {
         navigate({
           pathname: "/admin/",
         });
