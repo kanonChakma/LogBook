@@ -1,6 +1,7 @@
+import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import { FormControlLabel, IconButton, Link } from "@mui/material";
+import { Button, FormControlLabel, IconButton, Link } from "@mui/material";
 import Box from "@mui/material/Box";
 import { blue, red } from "@mui/material/colors";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
@@ -59,15 +60,15 @@ const columns: GridColDef[] = [
   {
     field: "title",
     headerName: "Title",
-    width: 300,
+    width: 270,
     editable: false,
     disableColumnMenu: true,
     sortable: false,
   },
   {
-    field: "category",
-    headerName: "Category",
-    width: 100,
+    field: "category_name",
+    headerName: "Category Name",
+    width: 150,
     editable: false,
     disableColumnMenu: true,
     sortable: false,
@@ -81,9 +82,9 @@ const columns: GridColDef[] = [
     sortable: false,
   },
   {
-    field: "author",
-    headerName: "Author",
-    width: 100,
+    field: "author_name",
+    headerName: "Author Name",
+    width: 200,
     editable: false,
     disableColumnMenu: true,
     sortable: false,
@@ -94,7 +95,7 @@ const columns: GridColDef[] = [
     editable: false,
     disableColumnMenu: true,
     sortable: false,
-    width: 70,
+    width: 100,
     renderCell: (params) => {
       return (
         <div
@@ -112,7 +113,7 @@ const columns: GridColDef[] = [
     editable: false,
     disableColumnMenu: true,
     sortable: false,
-    width: 50,
+    width: 100,
     renderCell: (params) => {
       return (
         <div
@@ -126,24 +127,6 @@ const columns: GridColDef[] = [
   },
 ];
 
-const rows = [
-  { id: 1, lastName: "Snow", firstName: "Jon", age: 35 },
-  {
-    id: 2,
-    lastName:
-      "Lannister ajflaksdf askjdfkasdl flksjdfkasld faksldf jasldkfja sdfkljasd",
-    firstName: "Cersei",
-    age: 42,
-  },
-  { id: 3, lastName: "Lannister", firstName: "Jaime", age: 45 },
-  { id: 4, lastName: "Stark", firstName: "Arya", age: 16 },
-  { id: 5, lastName: "Targaryen", firstName: "Daenerys", age: 67 },
-  { id: 6, lastName: "Melisandre", firstName: "hello", age: 150 },
-  { id: 7, lastName: "Clifford", firstName: "Ferrara", age: 44 },
-  { id: 8, lastName: "Frances", firstName: "Rossini", age: 36 },
-  { id: 9, lastName: "Roxie", firstName: "Harvey", age: 65 },
-];
-
 interface PostType {
   posts: AdminResponse[];
 }
@@ -151,6 +134,24 @@ interface PostType {
 const Dashboard: React.FC<PostType> = ({ posts }) => {
   return (
     <Box sx={{ height: 600, width: "100%" }}>
+      <Box textAlign="right">
+        <Button
+          style={{
+            marginBottom: "10px",
+            marginRight: "10px",
+          }}
+          variant="outlined"
+          startIcon={<AddIcon />}
+        >
+          <Link
+            style={{ textDecoration: "none" }}
+            color="textPrimary"
+            href="/admin/create/"
+          >
+            Create Post
+          </Link>
+        </Button>
+      </Box>
       <DataGrid
         autoHeight={true}
         getRowHeight={() => "auto"}

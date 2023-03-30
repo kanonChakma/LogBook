@@ -60,5 +60,11 @@ class Comment(models.Model):
     class Meta:
         ordering = ("-created_at",)
 
+    def save(self, *args, **kwargs):
+        self.created_at = timezone.localtime(
+            timezone.now()
+        )  # set the local time with timezone
+        super().save(*args, **kwargs)
+
     def __str__(self) -> str:
         return f"{self.post}-{self.user}"

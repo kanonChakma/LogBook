@@ -11,7 +11,7 @@ const Admin: React.FC = () => {
       .get("/posts")
       .then((res) => {
         console.log(res.data);
-        setPosts(res.data);
+        setPosts(res.data.results);
       })
       .then((err) => {
         console.log(err);
@@ -22,11 +22,12 @@ const Admin: React.FC = () => {
     <Container maxWidth="lg">
       <Grid
         container
+        marginTop="10px"
         alignItems="center"
         justifyContent="center"
         style={{ minHeight: "100vh" }}
       >
-        <Grid item xs={10}>
+        <Grid item xs={12}>
           <AdminDashboard posts={posts} />
         </Grid>
       </Grid>

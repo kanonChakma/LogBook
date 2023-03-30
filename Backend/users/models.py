@@ -35,7 +35,7 @@ class CustomAccountManager(BaseUserManager):
         return user
 
 
-def upload_to_path(instance: "NewUser", filename: str) -> str:
+def upload_to_path(instance, filename):
     user_id: str = instance.id
     return f"{settings.PROFILE_IMAGE_DIR_NAME}/{user_id}-{filename}"
 

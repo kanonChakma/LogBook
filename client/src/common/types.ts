@@ -32,13 +32,21 @@ export interface AdminResponse {
   slug: string;
   status: string;
   title: string;
+  author_name: string;
+  author_profile_image: string;
+  category_name: string;
 }
 
 export interface CommentType {
-  content:string;
-  created_at:string;
-  id:number;
-  post:number;
-  user:number;
-  user_profile_image: string
+  content: string;
+  created_at: string;
+  id: number;
+  post: number;
+  user: number;
+  user_profile_image: string;
+  user_username: string;
+}
+export interface TokenType {
+  access: string;
+  refresh: string;
 }

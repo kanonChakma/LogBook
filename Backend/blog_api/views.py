@@ -11,6 +11,7 @@ from rest_framework.permissions import (
 )
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from .pagination import PageNumberPagination
 from .serailizers import CategorySerializer, CommentSerializer, PostSerializer
@@ -65,6 +66,7 @@ class CreatePost(APIView):
     parser_classes = [MultiPartParser, FormParser]
 
     def post(self, request, format=None):
+        print(request.data)
         post_serializer = PostSerializer(data=request.data)
         if post_serializer.is_valid():
             post_serializer.save()
@@ -80,7 +82,7 @@ class CreatePost(APIView):
         )
 
 
-class SinglePost(generics.RetrieveAPIView):
+class GetPostByPostId(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Post.objects.all()
     serializer_class = PostSerializer
@@ -115,21 +117,15 @@ class CategoryList(APIView):
 
 
 # comments
-class CommentList(APIView):
-    def get(self, request, post_id):
-        comments = Comment.objects.filter(post=post_id)
-        comment_serializer = CommentSerializer(instance=comments, many=True)
-        return Response(data=comment_serializer.data, status=status.HTTP_200_OK)
 
-    def post(self, request, post_id):
+
+class CreateComment(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
         try:
-            post = Post.objects.get(pk=post_id)
-            data = {}
-            data["post"] = str(post.id)
-            data["user"] = str(request.user.id)
-            data["content"] = request.data
-            print(data)
-            comment_serializer = CommentSerializer(data=data)
+            comment_serializer = CommentSerializer(data=request.data)
             if comment_serializer.is_valid():
                 comment_serializer.save()
                 return Response(
@@ -149,6 +145,13 @@ class CommentList(APIView):
                 data={"message": "Blog does not exist"},
                 status=status.HTTP_404_NOT_FOUND,
             )
+
+
+class CommentList(APIView):
+    def get(self, request, post_id):
+        comments = Comment.objects.filter(post=post_id)
+        comment_serializer = CommentSerializer(instance=comments, many=True)
+        return Response(data=comment_serializer.data, status=status.HTTP_200_OK)
 
 
 class CommentDetail(APIView):
@@ -189,7 +192,6 @@ class CommentDetail(APIView):
 
     def delete(self, request, comment_id, post_id):
         try:
-            post = Post.objects.get(pk=post_id)
             comment = Comment.objects.get(pk=comment_id)
             if request.user.id != comment.user.id:
                 return Response(

@@ -1,17 +1,16 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../common/axios";
+import axiosInstance from "../../common/axios";
+import { removeUserInfoFromLocalStorage } from "../../common/userInfo";
 
 const Logout: React.FC = () => {
   const navigate = useNavigate();
   useEffect(() => {
-    const response = axiosInstance.post("user/logout/", {
+    axiosInstance.post("user/logout/", {
       refresh_token: localStorage.getItem("refresh_token"),
     });
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("refresh_token");
-    axiosInstance.defaults.headers["Authorization"] = null;
-    navigate("/login");
+    removeUserInfoFromLocalStorage();
+    navigate("/auth/login");
   });
   return <div>Logout</div>;
 };
