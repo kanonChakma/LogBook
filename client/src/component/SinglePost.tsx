@@ -1,12 +1,12 @@
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import { Box, Container, Grid, Typography } from "@mui/material";
+import { Box, Container, Grid, Link, Typography } from "@mui/material";
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axiosInstance from "../common/axios";
 import { SinglePostType } from "../common/types";
 import Comments from "./Comments/Comments";
-
 const dataTpe = {
   id: 0,
   content: "",
@@ -15,12 +15,16 @@ const dataTpe = {
   status: "",
   title: "",
   post_image: "",
+  author_name: "",
+  author_profile_image: "",
+  published: new Date(),
 } as SinglePostType;
 
 const SinglePost: React.FC = () => {
   const { slug } = useParams();
 
   const [data, setData] = useState<SinglePostType>(dataTpe);
+  const user = localStorage.getItem("userId");
 
   useEffect(() => {
     axiosInstance.get(`post/${slug}`).then((res) => {
@@ -68,18 +72,47 @@ const SinglePost: React.FC = () => {
           display="flex"
           justifyContent="space-between"
           alignItems="center"
-          sx={{}}
+          sx={{
+            marginTop: "10px",
+          }}
         >
           <Box>
-            <p>Author</p>
+            <Box display="flex" alignItems="center" gap={2}>
+              <Box>
+                <img
+                  style={{
+                    width: "60px",
+                    height: "50px",
+                    marginTop: "10px",
+                    objectFit: "cover",
+                  }}
+                  src={data?.author_profile_image}
+                  alt="img"
+                />
+              </Box>
+              <Box display="flex" flexDirection="column" lineHeight="2px">
+                <Typography variant="body1">
+                  <Link href={`/profile/${data.author_name}`}>
+                    {data?.author_name}
+                  </Link>
+                </Typography>
+                <small>{moment(data?.published).fromNow()}</small>
+              </Box>
+            </Box>
           </Box>
           <Box display="flex">
-            <Box marginRight="1rem">
-              <EditIcon color="primary" />
-            </Box>
-            <Box marginRight="1rem">
-              <DeleteIcon color="warning" />
-            </Box>
+            {parseInt(user as string) === data.author ? (
+              <>
+                <Box marginRight="1rem">
+                  <EditIcon color="primary" />
+                </Box>
+                <Box marginRight="1rem">
+                  <DeleteIcon color="warning" />
+                </Box>
+              </>
+            ) : (
+              ""
+            )}
           </Box>
         </Grid>
 

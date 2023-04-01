@@ -9,12 +9,14 @@ import Register from "./component/Auth/Register";
 import Category from "./component/Category/Category";
 import Search from "./component/Search";
 import SinglePost from "./component/SinglePost";
+import UpdateProfile from "./component/User/UpdateProfile";
 import AdminLayout from "./Layout/AdminLayout";
 import AuthLayout from "./Layout/AuthLayout";
 import MainLayout from "./Layout/MainLayout";
 import Admin from "./pages/Admin";
 import Home from "./pages/Home";
 import PageNotFoundView from "./pages/PageNotFoundView";
+import Profile from "./pages/Profile";
 
 const App: React.FC = (): JSX.Element => {
   const mainRoutes = {
@@ -22,10 +24,12 @@ const App: React.FC = (): JSX.Element => {
     element: <MainLayout />,
     children: [
       { path: "/", element: <Home /> },
+      { path: "/profile/:profile_name", element: <Profile /> },
+      { path: "/profile/edit", element: <UpdateProfile /> },
       { path: "/search", element: <Search /> },
-      { path: "404", element: <PageNotFoundView /> },
       { path: "/post/:slug", element: <SinglePost /> },
       { path: "category/:category_name", element: <Category /> },
+      { path: "404", element: <PageNotFoundView /> },
       { path: "*", element: <Navigate to="/404" /> },
     ],
   };

@@ -1,4 +1,5 @@
 from blog.models import Category, Comment, Post
+from django.contrib.auth import get_user_model
 
 # from django.shortcuts import get_object_or_404
 from rest_framework import filters, generics, status
@@ -50,14 +51,16 @@ class PostDetail(generics.ListAPIView):
         return Post.objects.filter(slug=slug)
 
 
-class AutorPost(generics.ListCreateAPIView):
-    permission_classes = [IsAuthenticated]
-    serializer_class = PostSerializer
+class GetPostByAuthor(APIView):
+    # permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
-        user = self.request.user
-        print(user)
-        return Post.objects.filter(author=1)
+    def get(self, request, author_name):
+        user = get_user_model().objects.get(user_name=author_name)
+        print("user", user)
+        posts = Post.objects.filter(author=user.id)
+        print("posts", posts)
+        serializer = PostSerializer(posts, many=True)
+        return Response(serializer.data)
 
 
 # admin

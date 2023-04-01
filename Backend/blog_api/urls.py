@@ -1,7 +1,6 @@
 from django.urls import path
 
 from .views import (
-    AutorPost,
     CategoryList,
     CommentDetail,
     CommentList,
@@ -9,6 +8,7 @@ from .views import (
     CreatePost,
     DeletePost,
     EditPost,
+    GetPostByAuthor,
     GetPostByPostId,
     PostDetail,
     PostList,
@@ -28,7 +28,7 @@ app_name = "blog_api"
 urlpatterns = [
     path("posts/", PostList.as_view(), name="listcreate"),
     path("post/<str:slug>/", PostDetail.as_view(), name="detailcreate"),
-    path("author-post/", AutorPost.as_view(), name="author-post"),
+    path("post/<str:author_name>", GetPostByAuthor.as_view(), name="author-post"),
     path("search/", PostListDetailfilter.as_view(), name="postsearch"),
     # admin
     path("admin/post/", CreatePost.as_view(), name="createpost"),
