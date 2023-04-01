@@ -41,13 +41,22 @@ def upload_to_path(instance, filename):
 
 
 class NewUser(AbstractBaseUser, PermissionsMixin):
+    GENDER = [
+        ("Male", _("Male")),
+        ("Female", _("Female")),
+    ]
     email = models.EmailField(_("email address"), unique=True)
     user_name = models.CharField(max_length=150, unique=True)
     first_name = models.CharField(max_length=150, blank=True)
+    last_name = models.CharField(max_length=150, blank=True)
     start_date = models.DateTimeField(default=timezone.now)
-    about = models.TextField(_("about"), max_length=500, blank=True)
+    birth_date = models.DateField(auto_now_add=False, null=True, blank=True)
+    about = models.TextField(blank=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
+    gender = models.CharField(choices=GENDER, max_length=6, null=True, blank=True)
+    contact_number = models.CharField(max_length=20, null=True, blank=True)
+
     profile_image = models.ImageField(
         upload_to=upload_to_path, max_length=300, null=True, blank=True
     )

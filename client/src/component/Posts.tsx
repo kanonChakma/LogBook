@@ -22,6 +22,7 @@ const Posts = ({ posts }: PostType) => {
               author_name,
               content,
               author_profile_image,
+              published,
             }) => (
               <Post
                 key={`${title}+1`}
@@ -33,6 +34,7 @@ const Posts = ({ posts }: PostType) => {
                 author_name={author_name}
                 content={content}
                 author_profile_image={author_profile_image}
+                published={published}
               />
             )
           )}

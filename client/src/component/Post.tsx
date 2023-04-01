@@ -9,6 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
+import moment from "moment";
 import React from "react";
 import { SinglePostType } from "../common/types";
 
@@ -29,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   content: {
     textAlign: "left",
     padding: theme.spacing(3),
-    height: "100px",
+    height: "60px",
     color: "#4B5563",
   },
   divider: {
@@ -59,9 +60,11 @@ const useStyles = makeStyles((theme: Theme) => ({
     alignItems: "center",
   },
   cardfooterimg: {
-    width: "40px",
-    height: "40px",
+    width: "35px",
+    height: "35px",
     borderRadius: "50%",
+    marginTop: "12px",
+    objectFit: "cover",
   },
 }));
 
@@ -72,10 +75,16 @@ const Post = ({
   post_image,
   category_name,
   author_name,
+  published,
   author_profile_image,
 }: SinglePostType) => {
-  console.log(post_image);
   const classes = useStyles();
+  const myDateTime = new Date(published);
+  const myDate = myDateTime.toLocaleDateString("en-US", {
+    hour12: true,
+    hour: "numeric",
+    minute: "numeric",
+  });
   return (
     <Grid item xs={12} md={4} lg={4} mt={5}>
       <Card className={classes.card}>
@@ -95,12 +104,12 @@ const Post = ({
             variant="body2"
             gutterBottom
           >
-            {excerpt.substring(0, 100)}
+            {excerpt.substring(0, 100)}....
           </Typography>
         </CardContent>
         <CardContent>
           <Box className={classes.cardfooter}>
-            <Box display="flex" alignItems="center" gap={0.5}>
+            <Box display="flex" alignItems="center" gap={1}>
               <Box>
                 <img
                   className={classes.cardfooterimg}
@@ -109,8 +118,16 @@ const Post = ({
                 />
               </Box>
               <Box display="flex" flexDirection="column" lineHeight="2px">
-                <Typography variant="caption">{author_name}</Typography>
-                <small>2 Hours ago</small>
+                <Typography variant="caption">
+                  <Link
+                    style={{ color: "#4B5563" }}
+                    href={`/profile/${author_name}`}
+                  >
+                    {author_name}
+                  </Link>
+                </Typography>
+
+                <small>{moment(published).fromNow()}</small>
               </Box>
             </Box>
             <Box>

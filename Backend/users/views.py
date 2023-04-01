@@ -34,17 +34,12 @@ class CustomUserCreate(APIView):
         return Response(new_error, status=status.HTTP_400_BAD_REQUEST)
 
 
-class UserDeatail(APIView):
-    permission_classes = [IsAuthenticated]
-    parser_classes = [MultiPartParser, FormParser]
-
-    def get(self, request):
+class GetUserByName(APIView):
+    def get(self, request, user_name):
         try:
-            user = User.objects.get(pk=request.user.id)
+            user = User.objects.get(user_name=user_name)
             user_serializer = CustomUserSerializer(user)
-            if user_serializer.is_valid():
-                user_serializer.save()
-                return Response(data=user_serializer.data, status=status.HTTP_200_OK)
+            return Response(data=user_serializer.data, status=status.HTTP_200_OK)
 
         except User.DoesNotExist:
             return Response(
@@ -52,17 +47,36 @@ class UserDeatail(APIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-    def put(self, request, user_id):
+
+class UserProfile(APIView):
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
+
+    def get(self, request):
         try:
-            user = User.objects.get(pk=user_id)
+            userid = request.user
+            print(userid)
+            user = User.objects.get(id=request.user.id)
+            user_serializer = CustomUserSerializer(user)
+            return Response(data=user_serializer.data, status=status.HTTP_200_OK)
+
+        except User.DoesNotExist:
+            return Response(
+                data={"message": "user does not exist!!!!!!"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+    def put(self, request):
+        try:
+            user = User.objects.get(pk=request.user.id)
             user_serializer = CustomUserSerializer(
-                instance=user, data=request.data, many=True
+                instance=user, data=request.data, partial=True
             )
             if user_serializer.is_valid():
                 user_serializer.save()
                 return Response(
-                    data={"message": "user created successfully"},
-                    status=status.HTTP_201_CREATED,
+                    data={"message": "user updated successfully"},
+                    status=status.HTTP_200_OK,
                 )
             return Response(
                 data={"message": user_serializer.errors},

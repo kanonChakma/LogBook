@@ -22,6 +22,7 @@ export interface SinglePostType {
   category_name?: string;
   post_image: string;
   author_profile_image?: string;
+  published: Date;
 }
 
 export interface AdminResponse {
@@ -49,4 +50,18 @@ export interface CommentType {
 export interface TokenType {
   access: string;
   refresh: string;
+}
+
+export interface ProfileType {
+  about: string;
+  email: string;
+  id: number;
+  profile_image?: string;
+  start_date: string;
+  user_name: string;
+  gender?: string;
+  birth_date?: string;
+  first_name?: string;
+  last_name?: string;
+  contact_number?: string;
 }

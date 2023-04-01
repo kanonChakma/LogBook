@@ -51,6 +51,8 @@ const Register = () => {
     let formData = new FormData();
 
     formData.append("user_name", username);
+    formData.append("first_name", values.firstName);
+    formData.append("last_name", values.lastName);
     formData.append("email", values.email);
     formData.append("password", values.password);
 
