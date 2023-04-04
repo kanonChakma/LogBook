@@ -27,13 +27,15 @@ const SinglePost: React.FC = () => {
   const user = localStorage.getItem("userId");
 
   useEffect(() => {
-    axiosInstance.get(`post/${slug}`).then((res) => {
+    getSinglePost();
+  }, []);
+
+  const getSinglePost = async () => {
+    await axiosInstance.get(`post/${slug}`).then((res) => {
       setData(res.data[0]);
       console.log(res.data);
     });
-  }, []);
-
-  console.log({ data });
+  };
 
   return (
     <Container maxWidth="lg">

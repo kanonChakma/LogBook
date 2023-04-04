@@ -10,7 +10,7 @@ from .views import (
 app_name = "users"
 
 urlpatterns = [
-    path("create/", CustomUserCreate.as_view(), name="create_user"),
+    path("register/", CustomUserCreate.as_view(), name="create_user"),
     path("logout/", BlackListTokenUpdateView.as_view(), name="blacklist"),
     path("profile/", UserProfile.as_view(), name="profile"),
     path("<str:user_name>/", GetUserByName.as_view(), name="getbyusername"),

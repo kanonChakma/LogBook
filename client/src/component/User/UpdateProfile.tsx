@@ -44,43 +44,6 @@ const validationSchema = yup.object().shape({
   email: yup.string().email("Invalid email").required("Email is required"),
 });
 
-const handleSubmit = (
-  values: FormValues,
-  formikHelpers: FormikHelpers<FormValues>
-) => {
-  alert(JSON.stringify(values, null, 2));
-  let username = values.firstName + " " + values.lastName;
-  let formData = new FormData();
-  formData.append("user_name", username);
-  formData.append("first_name", values.firstName);
-  formData.append("last_name", values.lastName);
-  formData.append("about", values.about);
-  formData.append("contact_number", values.contactNo);
-  formData.append("birth_date", values.birthdate);
-  formData.append("gender", values.gender);
-
-  let existEmail = localStorage.getItem("email");
-  if (existEmail !== values.email) {
-    formData.append("email", values.email);
-  }
-
-  axios
-    .put(`${baseURL}user/profile/`, formData, {
-      headers: {
-        Authorization: localStorage.getItem("access_token")
-          ? "JWT " + localStorage.getItem("access_token")
-          : null,
-        "Content-Type": "multipart/form-data",
-      },
-    })
-    .then((res) => {
-      console.log(res);
-      console.log(res.data);
-    })
-    .catch((error: any) => {
-      console.log(error.response.data);
-    });
-};
 const assignUserData = (userInfo: ProfileType) => {
   const {
     about,
@@ -106,7 +69,11 @@ const UpdateProfile = () => {
   const [userData, setUserData] = useState<ProfileType>();
 
   useEffect(() => {
-    axiosInstance
+    getUser();
+  }, []);
+
+  const getUser = async () => {
+    await axiosInstance
       .get("user/profile/")
       .then((res) => {
         setUserData(res.data);
@@ -115,8 +82,49 @@ const UpdateProfile = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  };
+  console.log(userData);
+  const handleSubmit = (
+    values: FormValues,
+    formikHelpers: FormikHelpers<FormValues>
+  ) => {
+    alert(JSON.stringify(values, null, 2));
+    let username = values.firstName + " " + values.lastName;
+    let formData = new FormData();
+    formData.append("user_name", username);
+    formData.append("first_name", values.firstName);
+    formData.append("last_name", values.lastName);
+    formData.append("about", values.about);
+    formData.append("contact_number", values.contactNo);
+    formData.append("birth_date", values.birthdate);
+    formData.append("gender", values.gender);
 
+    if (profileimage) {
+      formData.append("profile_image", profileimage);
+    }
+
+    let existEmail = localStorage.getItem("email");
+    if (existEmail !== values.email) {
+      formData.append("email", values.email);
+    }
+
+    axios
+      .put(`${baseURL}user/profile/`, formData, {
+        headers: {
+          Authorization: localStorage.getItem("access_token")
+            ? "JWT " + localStorage.getItem("access_token")
+            : null,
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        getUser();
+        console.log(res.data);
+      })
+      .catch((error: any) => {
+        console.log(error.response.data);
+      });
+  };
   return (
     <Container maxWidth="lg">
       <Grid

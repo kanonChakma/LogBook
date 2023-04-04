@@ -1,15 +1,11 @@
 from blog.models import Category, Comment, Post
 from django.contrib.auth import get_user_model
-
 # from django.shortcuts import get_object_or_404
 from rest_framework import filters, generics, status
 from rest_framework.parsers import FormParser, MultiPartParser
-from rest_framework.permissions import (
-    SAFE_METHODS,
-    BasePermission,
-    IsAuthenticated,
-    IsAuthenticatedOrReadOnly,
-)
+from rest_framework.permissions import (SAFE_METHODS, BasePermission,
+                                        IsAuthenticated,
+                                        IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -158,9 +154,8 @@ class CommentList(APIView):
 
 
 class CommentDetail(APIView):
-    def put(self, request, comment_id, post_id):
+    def put(self, request, comment_id):
         try:
-            post = Post.objects.get(pk=post_id)
             comment = Comment.objects.get(pk=comment_id)
             if request.user.id != comment.user.id:
                 return Response(
@@ -193,7 +188,7 @@ class CommentDetail(APIView):
                     status=status.HTTP_404_NOT_FOUND,
                 )
 
-    def delete(self, request, comment_id, post_id):
+    def delete(self, request, comment_id):
         try:
             comment = Comment.objects.get(pk=comment_id)
             if request.user.id != comment.user.id:

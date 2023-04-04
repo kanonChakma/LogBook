@@ -23,6 +23,8 @@ class CustomUserSerializer(serializers.ModelSerializer):
             "birth_date",
             "first_name",
             "last_name",
+            "is_staff",
+            "is_active",
         )
         extra_kwargs = {"password": {"write_only": True}}
 

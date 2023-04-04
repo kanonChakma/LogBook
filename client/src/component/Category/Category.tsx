@@ -1,8 +1,8 @@
 import { Box, Container, Grid, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { featchPostsByCategory } from "../../feature/categories/CategorySlice";
 import { useAppDispatch, useAppSelector } from "../../feature/hook";
-import { featchPostsByCategory } from "../../feature/posts/CategoryPostSlice";
 import CategoryPosts from "./CategoryPosts";
 
 const Category: React.FC = () => {
@@ -20,7 +20,9 @@ const Category: React.FC = () => {
       console.log(error);
     }
   };
-  const posts = useAppSelector((state) => state.categorPosts.categoryPosts);
+
+  const posts = useAppSelector((state) => state.categories.categoryPosts);
+
   return (
     <Container maxWidth="lg">
       <Grid
@@ -40,7 +42,6 @@ const Category: React.FC = () => {
               variant="h5"
             >
               {category_name} Category All Post
-              {posts.length}
             </Typography>
             <CategoryPosts categoryPosts={posts} />
           </Box>

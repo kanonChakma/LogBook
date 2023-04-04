@@ -42,7 +42,7 @@ interface TextEditorType {
 const TextEditor = ({ value, setValue }: TextEditorType) => {
   return (
     <ReactQuill
-      style={{ height: "200px" }}
+      style={{ height: "170px" }}
       theme="snow"
       modules={modules}
       formats={formats}

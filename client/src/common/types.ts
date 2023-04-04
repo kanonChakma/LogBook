@@ -65,3 +65,29 @@ export interface ProfileType {
   last_name?: string;
   contact_number?: string;
 }
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface LoginResponse {
+  email: string;
+  userId: string;
+  access: string;
+  username: string;
+  refresh: string;
+}
+
+export interface ApiError {
+  message: string;
+  code: number;
+}
+
+export interface authType {
+  loading: boolean;
+  userInfo: ProfileType;
+  userCredentials: LoginResponse;
+  error: ApiError | null;
+  success: boolean;
+}

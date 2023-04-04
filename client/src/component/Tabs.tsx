@@ -1,10 +1,14 @@
 import { Grid, Link } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
-import axiosInstance from "../common/axios";
 import { CategoryType } from "../common/types";
+import {
+  fetchCategories,
+  getAllCategories,
+} from "../feature/categories/CategorySlice";
+import { useAppDispatch, useAppSelector } from "../feature/hook";
 
 var settings = {
   dots: false,
@@ -79,19 +83,20 @@ const tabss = [
 ];
 
 const Tabs = () => {
-  const [tabs, setTabs] = useState<CategoryType[]>([]);
-
+  const dispatch = useAppDispatch();
   useEffect(() => {
-    axiosInstance
-      .get("categories/")
-      .then((res) => {
-        console.log(res.data);
-        setTabs(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    fetchCategory();
   }, []);
+
+  const fetchCategory = async () => {
+    try {
+      await dispatch(fetchCategories());
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const tabs: CategoryType[] = useAppSelector(getAllCategories);
 
   return (
     <Grid

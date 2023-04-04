@@ -2,16 +2,23 @@ import {
   Button,
   Container,
   Grid,
+  MenuItem,
   TextField,
   Theme,
   Typography,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "react-quill/dist/quill.snow.css";
 import { useNavigate } from "react-router-dom";
+import { CategoryType } from "../../common/types";
 import { slugify } from "../../common/utils";
+import {
+  fetchCategories,
+  getAllCategories,
+} from "../../feature/categories/CategorySlice";
+import { useAppDispatch, useAppSelector } from "../../feature/hook";
 import ImageUplaod from "../ImageUplaod";
 import TextEditor from "./TextEditor";
 
@@ -46,10 +53,26 @@ const Create: React.FC = () => {
     title: "",
     slug: "",
     excerpt: "",
+    category: "",
   });
 
   const [postData, setPostData] = useState(initialFormData);
   const [postimage, setPostImage] = useState<File | null>();
+
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    fetchCategory();
+  }, []);
+
+  const fetchCategory = async () => {
+    try {
+      await dispatch(fetchCategories());
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const categories: CategoryType[] = useAppSelector(getAllCategories);
 
   const handleChange = (e: { target: { name: any; value: string } }) => {
     if (e.target.name === "title") {
@@ -76,6 +99,7 @@ const Create: React.FC = () => {
     formData.append("author", userId as string);
     formData.append("excerpt", postData.excerpt);
     formData.append("content", value);
+    formData.append("category", postData.category);
     if (postimage) {
       formData.append("post_image", postimage);
     }
@@ -111,7 +135,7 @@ const Create: React.FC = () => {
         <Grid
           item
           xs={12}
-          md={10}
+          md={9}
           gap={3}
           sx={{
             boxShadow:
@@ -120,9 +144,7 @@ const Create: React.FC = () => {
             textAlign: "center",
           }}
         >
-          <Typography component="h1" variant="h5">
-            Create New Post
-          </Typography>
+          <Typography component="h1" variant="h5"></Typography>
           <form onSubmit={handleSubmit} className={classes.form} noValidate>
             <Grid container spacing={2}>
               <Grid item xs={12} md={6}>
@@ -161,23 +183,41 @@ const Create: React.FC = () => {
                   autoComplete="excerpt"
                   onChange={handleChange}
                   multiline
-                  rows={4}
+                  rows={3}
                 />
               </Grid>
-              <Grid item xs={12} mb={5}>
-                <TextEditor value={value} setValue={setValue} />
-              </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} md={6}>
                 <ImageUplaod
                   postimage={postimage}
                   setPostImage={setPostImage}
                 />
               </Grid>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  id="category"
+                  select
+                  label="Category"
+                  margin="normal"
+                  fullWidth
+                  name="category"
+                  onChange={handleChange}
+                >
+                  {categories.map((cate) => (
+                    <MenuItem value={cate.name} key={cate.id}>
+                      <em>{cate.name}</em>
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Grid>
+              <Grid item xs={12} mb={5}>
+                <TextEditor value={value} setValue={setValue} />
+              </Grid>
             </Grid>
             <Button
               type="submit"
               fullWidth
-              variant="contained"
+              size="large"
+              variant="outlined"
               color="primary"
               style={{
                 marginTop: "30px",

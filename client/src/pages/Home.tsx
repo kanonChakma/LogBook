@@ -16,11 +16,15 @@ const Home = () => {
     setPageNo(pageNumber);
   };
   useEffect(() => {
-    axiosInstance.get(`posts/?p=${pageNo}`).then((res) => {
+    getPosts();
+  }, [pageNo]);
+
+  const getPosts = async () => {
+    await axiosInstance.get(`posts/?p=${pageNo}`).then((res) => {
       setPost(res.data.results);
       console.log(res.data.results);
     });
-  }, [pageNo]);
+  };
 
   return (
     <Container maxWidth="lg">
@@ -34,14 +38,14 @@ const Home = () => {
             direction="column"
             alignItems="center"
             justifyContent="center"
-            style={{ minHeight: "20vh" }}
+            style={{ minHeight: "10vh" }}
           >
             <Grid item xs={3}>
               <Pagination
                 onChange={(event, pageNumber) =>
                   pageChangeHandler(event, pageNumber)
                 }
-                count={5}
+                count={3}
                 variant="outlined"
                 shape="rounded"
               />

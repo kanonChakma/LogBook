@@ -16,7 +16,6 @@ import { SinglePostType } from "../common/types";
 const useStyles = makeStyles((theme: Theme) => ({
   card: {
     color: "#4B5563",
-    maxWidth: 300,
     margin: "auto",
     transition: "0.3s",
     boxShadow: "0 8px 40px -12px rgba(0,0,0,0.3)",
@@ -39,7 +38,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   heading: {
     fontWeight: "800",
     cursor: "pointer",
-    textAlign: "center",
+    textAlign: "start",
     marginBottom: "10px",
   },
   subheading: {
@@ -60,13 +59,15 @@ const useStyles = makeStyles((theme: Theme) => ({
     alignItems: "center",
   },
   cardfooterimg: {
-    width: "35px",
-    height: "35px",
+    width: "30px",
+    height: "30px",
     borderRadius: "50%",
     marginTop: "12px",
     objectFit: "cover",
   },
 }));
+export const alterImage =
+  "https://images.unsplash.com/photo-1597089542047-b9873d82d8ec?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80";
 
 const Post = ({
   title,
@@ -86,14 +87,14 @@ const Post = ({
     minute: "numeric",
   });
   return (
-    <Grid item xs={12} md={4} lg={4} mt={5}>
+    <Grid item xs={12} md={4} lg={3} mt={3}>
       <Card className={classes.card}>
         <CardMedia className={classes.media} image={post_image} />
         <CardContent className={classes.content}>
           <Link color="textPrimary" href={"/post/" + slug}>
             <Typography
               className={classes.heading}
-              variant={"body1"}
+              variant={"body2"}
               gutterBottom
             >
               {title}
@@ -104,7 +105,7 @@ const Post = ({
             variant="body2"
             gutterBottom
           >
-            {excerpt.substring(0, 100)}....
+            {excerpt.substring(0, 50)}....
           </Typography>
         </CardContent>
         <CardContent>
@@ -113,7 +114,7 @@ const Post = ({
               <Box>
                 <img
                   className={classes.cardfooterimg}
-                  src={author_profile_image}
+                  src={author_profile_image ? author_profile_image : alterImage}
                   alt="img"
                 />
               </Box>
@@ -131,7 +132,7 @@ const Post = ({
               </Box>
             </Box>
             <Box>
-              <Typography variant="button">
+              <Typography variant="body2">
                 <Link
                   style={{ color: "#4B5563" }}
                   href={`/category/${category_name}`}

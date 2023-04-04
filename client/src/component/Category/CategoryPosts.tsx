@@ -12,6 +12,7 @@ import {
 import { makeStyles } from "@mui/styles";
 import React from "react";
 import { SinglePostType } from "../../common/types";
+import { alterImage } from "../Post";
 
 const useStyles = makeStyles((theme: Theme) => ({
   card: {
@@ -30,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   content: {
     textAlign: "left",
     padding: theme.spacing(3),
-    height: "100px",
+    height: "60px",
     color: "#4B5563",
   },
   divider: {
@@ -57,12 +58,13 @@ const useStyles = makeStyles((theme: Theme) => ({
     justifyContent: "space-between",
     borderTop: "1px solid rgba(0, 0, 0, .2)",
     paddingTop: "10px",
-    alignItems: "center",
+    alignItems: "centecardfooterimgr",
   },
   cardfooterimg: {
     width: "40px",
     height: "40px",
     borderRadius: "50%",
+    marginTop: "10px",
   },
 }));
 
@@ -76,11 +78,14 @@ const CategoryPosts = ({ categoryPosts }: PostType) => {
   return (
     <>
       <Container maxWidth="xl" component="main">
-        <Grid container spacing={5} alignItems="flex-end">
+        <Grid container spacing={2} alignItems="flex-end">
           {categoryPosts.map((post) => (
-            <Grid item xs={12} md={4} lg={4} mt={5} key={post.id}>
+            <Grid item xs={12} md={4} lg={3} mt={5} key={post.id}>
               <Card className={classes.card}>
-                <CardMedia className={classes.media} image={post.post_image} />
+                <CardMedia
+                  className={classes.media}
+                  image={`http://127.0.0.1:8000${post.post_image}`}
+                />
                 <CardContent className={classes.content}>
                   <Link color="textPrimary" href={"/post/" + post.slug}>
                     <Typography
@@ -96,16 +101,20 @@ const CategoryPosts = ({ categoryPosts }: PostType) => {
                     variant="body2"
                     gutterBottom
                   >
-                    {post.excerpt.substring(0, 100)}
+                    {post.excerpt.substring(0, 50)}....
                   </Typography>
                 </CardContent>
                 <CardContent>
                   <Box className={classes.cardfooter}>
-                    <Box display="flex" alignItems="center" gap={0.5}>
+                    <Box display="flex" alignItems="center" gap={1}>
                       <Box>
                         <img
                           className={classes.cardfooterimg}
-                          src={post.author_profile_image}
+                          src={
+                            post.author_profile_image
+                              ? `http://127.0.0.1:8000${post.author_profile_image}`
+                              : alterImage
+                          }
                           alt="img"
                         />
                       </Box>
@@ -121,7 +130,7 @@ const CategoryPosts = ({ categoryPosts }: PostType) => {
                       </Box>
                     </Box>
                     <Box>
-                      <Typography variant="button">
+                      <Typography variant="body2">
                         <Link
                           style={{ color: "#4B5563" }}
                           href={`/category/${post.category_name}`}

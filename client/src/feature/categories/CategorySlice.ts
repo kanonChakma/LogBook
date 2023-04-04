@@ -1,21 +1,24 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosInstance from "../../common/axios";
-import { SinglePostType } from "../../common/types";
+import { CategoryType, SinglePostType } from "../../common/types";
 import { RootState } from "../../store";
 
 interface ApiError {
   message: string;
   code: number;
 }
-interface categoryPoststate {
+
+interface categoryiesState {
   categoryPosts: SinglePostType[];
+  categories: CategoryType[];
   status: string;
   error: ApiError;
   isLoading: boolean;
 }
 
-const initialState: categoryPoststate = {
+const initialState: categoryiesState = {
   categoryPosts: [],
+  categories: [],
   status: "idle",
   isLoading: false,
   error: {
@@ -47,7 +50,21 @@ export const featchPostsByCategory = createAsyncThunk<
   }
 );
 
-export const categoryPostslice = createSlice({
+export const fetchCategories = createAsyncThunk<CategoryType[]>(
+  "posts/fetchcategories",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get("categories/");
+      return [...response.data];
+    } catch (err: any) {
+      return rejectWithValue({
+        message: err.message as string,
+        code: err.code,
+      });
+    }
+  }
+);
+export const categorySlice = createSlice({
   name: "categoryPosts",
   initialState,
   reducers: {},
@@ -65,14 +82,21 @@ export const categoryPostslice = createSlice({
       state.status = "failed";
       state.error = action.payload as ApiError;
     });
+
+    builder.addCase(fetchCategories.fulfilled, (state, action) => {
+      state.status = "succeeded";
+      state.categories = action.payload;
+    });
   },
 });
 
 export const selectAllPost = (state: RootState) =>
-  state.categorPosts.categoryPosts;
+  state.categories.categoryPosts;
 export const getcategoryPoststatus = (state: RootState) =>
-  state.categorPosts.status;
+  state.categories.status;
 export const getcategoryPostsError = (state: RootState) =>
-  state.categorPosts.error;
+  state.categories.error;
 
-export default categoryPostslice.reducer;
+export const getAllCategories = (state: RootState) =>
+  state.categories.categories;
+export default categorySlice.reducer;

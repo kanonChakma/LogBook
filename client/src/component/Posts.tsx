@@ -11,7 +11,7 @@ const Posts = ({ posts }: PostType) => {
   return (
     <React.Fragment>
       <Container maxWidth="xl" component="main">
-        <Grid container spacing={5} alignItems="flex-end">
+        <Grid container spacing={2} alignItems="flex-end">
           {posts.map(
             ({
               title,
