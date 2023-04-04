@@ -75,5 +75,5 @@ It is a full-stack blog web application built with React on the frontend and Dja
 ![](readme-res//erd-vis.png)
 
 ## Screenshots <a name="screenshots"></a>
-
-![](readme-res//screenshots.png)
+![](doc//p1.png)
+![](doc//p2.png)
