@@ -12,10 +12,10 @@ interface ImageUplaodType {
 const ImageUplaod = ({ postimage, setPostImage }: ImageUplaodType) => {
   return (
     <Box
-      gridColumn="span 4"
+      gridColumn="span 3"
       border={`1px solid gray`}
       borderRadius="5px"
-      p="1rem"
+      p="0.5rem"
     >
       <Dropzone
         multiple={false}
@@ -24,7 +24,7 @@ const ImageUplaod = ({ postimage, setPostImage }: ImageUplaodType) => {
         {({ getRootProps, getInputProps }) => (
           <Box
             {...getRootProps()}
-            border={`2px dashed red`}
+            border={`2px dashed gray`}
             p="1rem"
             sx={{ "&:hover": { cursor: "pointer" } }}
           >

@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
+import authReducer from "./feature/auth/authSlice";
+import categoryReducer from "./feature/categories/CategorySlice";
 import commentsReducer from "./feature/comments/commentSlice";
-import counterReducer from "./feature/counter/counterSlice";
-import categoryReducer from "./feature/posts/CategoryPostSlice";
 import postsReducer from "./feature/posts/postSlice";
 import usersReducer from "./feature/users/userSlice";
 
@@ -10,8 +10,8 @@ export const store = configureStore({
     posts: postsReducer,
     comments: commentsReducer,
     users: usersReducer,
-    counter: counterReducer,
-    categorPosts: categoryReducer,
+    categories: categoryReducer,
+    auth: authReducer,
   },
 });
 

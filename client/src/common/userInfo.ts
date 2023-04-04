@@ -21,3 +21,14 @@ export const removeUserInfoFromLocalStorage = () => {
   localStorage.removeItem("refresh_token");
   axiosInstance.defaults.headers["Authorization"] = null;
 };
+
+export const getUserInfoFromLocalStorage = () => {
+  const user = {
+    userId: localStorage.getItem("userId"),
+    username: localStorage.getItem("username"),
+    email: localStorage.getItem("email"),
+    access: localStorage.getItem("access_token"),
+    refresh: localStorage.getItem("refresh_token"),
+  };
+  return user;
+};

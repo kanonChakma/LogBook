@@ -1,12 +1,12 @@
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { Box, Button, Fab, Grid, Typography } from "@mui/material";
 import Link from "@mui/material/Link";
-import axios from "axios";
 import { Field, Form, Formik, FormikHelpers, FormikProps } from "formik";
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
-import { baseURL } from "../../common/axios";
+import { registerUser } from "../../feature/auth/authActions";
+import { useAppDispatch, useAppSelector } from "../../feature/hook";
 import { FormTextField } from "../FormTextField";
 import ImageUplaod from "../ImageUplaod";
 
@@ -14,6 +14,10 @@ const Register = () => {
   const [profileimage, setProfileImage] = React.useState<File | null>();
   const navigate = useNavigate();
 
+  const dispatch = useAppDispatch();
+  const { loading, userInfo, error, success } = useAppSelector(
+    (state) => state.auth
+  );
   interface FormValues {
     firstName: string;
     lastName: string;
@@ -21,6 +25,11 @@ const Register = () => {
     password: string;
     confirmPassword: string;
   }
+
+  React.useEffect(() => {
+    if (success) navigate("/auth/login");
+    if (userInfo) navigate("/profile");
+  }, [navigate, userInfo, success]);
 
   const initialValues: FormValues = {
     firstName: "",
@@ -60,21 +69,7 @@ const Register = () => {
       formData.append("profile_image", profileimage);
     }
 
-    axios
-      .post(`${baseURL}user/create/`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then((res) => {
-        console.log(res);
-        console.log(res.data);
-        formikHelpers.setSubmitting(false);
-        navigate("/auth/login");
-      })
-      .catch((error: any) => {
-        console.log(error.response.data);
-      });
+    dispatch(registerUser(formData));
   };
 
   return (
@@ -88,6 +83,7 @@ const Register = () => {
         justifyContent: "center",
       }}
     >
+      {error ? error.message : ""}
       <Grid
         item
         xs={12}
@@ -174,7 +170,7 @@ const Register = () => {
                       color="primary"
                       disabled={formikProps.isSubmitting}
                     >
-                      Submit
+                      {loading ? "loading...." : "Register"}
                     </Button>
                   </Grid>
                 </Grid>
@@ -196,3 +192,19 @@ const Register = () => {
 };
 
 export default Register;
+
+// axios
+//   .post(`${baseURL}user/create/`, formData, {
+//     headers: {
+//       "Content-Type": "multipart/form-data",
+//     },
+//   })
+//   .then((res) => {
+//     console.log(res);
+//     console.log(res.data);
+//     formikHelpers.setSubmitting(false);
+//     navigate("/auth/login");
+//   })
+//   .catch((error: any) => {
+//     console.log(error.response.data);
+//   });

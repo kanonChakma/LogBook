@@ -38,7 +38,7 @@ const Comments = ({ id }: { id: number }) => {
   }, [id]);
 
   const getComments = async () => {
-    await axiosInstance.get(`comment/${id}`).then((res) => {
+    await axiosInstance.get(`post/${id}/comments/`).then((res) => {
       setComments(res.data);
       console.log(res.data);
     });
@@ -70,11 +70,10 @@ const Comments = ({ id }: { id: number }) => {
   };
 
   const deleteCommnet = async (comment_id: number) => {
-    await axiosInstance
-      .delete(`post/${id}/comment/${comment_id}/`)
-      .then((res) => {
-        console.log(res.data);
-      });
+    await axiosInstance.delete(`comment/${comment_id}/`).then((res) => {
+      console.log(res);
+      getComments();
+    });
   };
 
   return (
@@ -97,11 +96,12 @@ const Comments = ({ id }: { id: number }) => {
                       alt="Remy Sharp"
                       src={
                         comment.user_profile_image
-                          ? comment.user_profile_image
+                          ? `http://127.0.0.1:8000${comment.user_profile_image}`
                           : imgLink
                       }
                     />
                   </Grid>
+
                   <Grid justifyContent="left" item xs zeroMinWidth>
                     <h4 style={{ margin: 0, textAlign: "left" }}>
                       {comment.user_username}

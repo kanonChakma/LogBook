@@ -8,17 +8,27 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../../common/axios";
-import { setUserInfoInLocalStorage } from "../../common/userInfo";
+import { loginUser } from "../../feature/auth/authActions";
+import { useAppDispatch, useAppSelector } from "../../feature/hook";
 
 export default function Login() {
+  const { loading, userCredentials, error } = useAppSelector(
+    (state) => state.auth
+  );
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
   const initialFormData = Object.freeze({
     email: "",
     password: "",
   });
-
   const [formData, updateFormData] = React.useState(initialFormData);
+
+  React.useEffect(() => {
+    if (userCredentials.email) {
+      navigate("/");
+    }
+  }, [navigate, userCredentials]);
 
   const handleChange = (e: { target: { name: any; value: string } }) => {
     updateFormData({
@@ -29,18 +39,7 @@ export default function Login() {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    axiosInstance
-      .post("token/", {
-        email: formData.email,
-        password: formData.password,
-      })
-      .then((res) => {
-        setUserInfoInLocalStorage(res.data);
-        navigate("/");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    dispatch(loginUser(formData));
   };
 
   return (

@@ -91,7 +91,6 @@ const Create: React.FC = () => {
       >
         <Grid
           item
-          gap={3}
           sx={{
             boxShadow:
               "rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px",
@@ -100,11 +99,11 @@ const Create: React.FC = () => {
           }}
         >
           <Typography component="h1" variant="h5">
-            Edit Post
+            UPDATE
           </Typography>
           <form className={classes.form} onSubmit={handleSubmit} noValidate>
-            <Grid container gap={3}>
-              <Grid item xs={12}>
+            <Grid container gap={2}>
+              <Grid item xs={12} md={12}>
                 <TextField
                   variant="outlined"
                   required
@@ -117,22 +116,7 @@ const Create: React.FC = () => {
                   onChange={handleChange}
                 />
               </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="excerpt"
-                  label="Post Excerpt"
-                  name="excerpt"
-                  autoComplete="excerpt"
-                  value={formData.excerpt}
-                  onChange={handleChange}
-                  multiline
-                  rows={8}
-                />
-              </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} md={12}>
                 <TextField
                   variant="outlined"
                   required
@@ -150,6 +134,22 @@ const Create: React.FC = () => {
                   variant="outlined"
                   required
                   fullWidth
+                  id="excerpt"
+                  label="Post Excerpt"
+                  name="excerpt"
+                  autoComplete="excerpt"
+                  value={formData.excerpt}
+                  onChange={handleChange}
+                  multiline
+                  rows={4}
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
                   id="content"
                   label="content"
                   name="content"
@@ -157,7 +157,7 @@ const Create: React.FC = () => {
                   value={formData.content}
                   onChange={handleChange}
                   multiline
-                  rows={8}
+                  rows={6}
                 />
               </Grid>
             </Grid>

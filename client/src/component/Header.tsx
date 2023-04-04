@@ -1,8 +1,7 @@
-import AdbIcon from "@mui/icons-material/Adb";
 import MenuIcon from "@mui/icons-material/Menu";
+import MenuBookIcon from "@mui/icons-material/MenuBook";
 import SearchIcon from "@mui/icons-material/Search";
 import AppBar from "@mui/material/AppBar";
-import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
@@ -16,6 +15,9 @@ import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axiosInstance from "../common/axios";
+import { ProfileType } from "../common/types";
+import { getUserInfoFromLocalStorage } from "../common/userInfo";
 
 const pages = ["Home", "About", "Contact", "Write"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
@@ -61,13 +63,29 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
   },
 }));
+const alterImage =
+  "https://images.unsplash.com/photo-1597089542047-b9873d82d8ec?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80";
 
-const Header = () => {
+const Header: React.FC = () => {
   const [searchData, setSearchData] = React.useState("");
+  const [profileInfo, setProfileInfo] = React.useState<ProfileType>();
+
   const navigate = useNavigate();
+  const user = getUserInfoFromLocalStorage();
+
+  React.useEffect(() => {
+    axiosInstance
+      .get(`user/profile/`)
+      .then((res) => {
+        setProfileInfo(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
+
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
@@ -75,6 +93,7 @@ const Header = () => {
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
+
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -86,6 +105,7 @@ const Header = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     navigate({
@@ -100,7 +120,7 @@ const Header = () => {
     <AppBar position="fixed">
       <Container maxWidth="lg">
         <Toolbar>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+          <MenuBookIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
           <Typography
             variant="h6"
             noWrap
@@ -111,12 +131,12 @@ const Header = () => {
               display: { xs: "none", md: "flex" },
               fontFamily: "monospace",
               fontWeight: 700,
-              letterSpacing: ".3rem",
+              letterSpacing: ".1rem",
               color: "inherit",
               textDecoration: "none",
             }}
           >
-            LOGO
+            LOGBOOK
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -156,7 +176,7 @@ const Header = () => {
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+          <MenuBookIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
           <Typography
             variant="h5"
             noWrap
@@ -168,12 +188,12 @@ const Header = () => {
               flexGrow: 1,
               fontFamily: "monospace",
               fontWeight: 700,
-              letterSpacing: ".3rem",
+              letterSpacing: ".1rem",
               color: "inherit",
               textDecoration: "none",
             }}
           >
-            LOGO
+            LOGBOOK
           </Typography>
 
           <Box
@@ -219,39 +239,50 @@ const Header = () => {
               sx={{
                 flexGrow: 1,
                 display: { xs: "none", md: "flex" },
-                marginRight: "30px",
+                marginRight: "20px",
                 color: "white",
               }}
             >
-              <Button>
-                <Link
-                  to="/auth/login"
-                  style={{ color: "#4B5563", textDecoration: "none" }}
-                >
-                  Login
-                </Link>
-              </Button>
-              <Button>
-                <Link
-                  to="/auth/logout"
-                  style={{ color: "#4B5563", textDecoration: "none" }}
-                >
-                  Logout
-                </Link>
-              </Button>
-              <Button>
-                <Link
-                  to="/auth/register"
-                  style={{ color: "#4B5563", textDecoration: "none" }}
-                >
-                  Register
-                </Link>
-              </Button>
+              {user.email ? (
+                <Button>{user.username}</Button>
+              ) : (
+                <>
+                  <Button>
+                    <Link
+                      to="/auth/login"
+                      style={{ color: "#4B5563", textDecoration: "none" }}
+                    >
+                      Login
+                    </Link>
+                  </Button>
+                  <Button>
+                    <Link
+                      to="/auth/register"
+                      style={{ color: "#4B5563", textDecoration: "none" }}
+                    >
+                      Register
+                    </Link>
+                  </Button>
+                </>
+              )}
             </Box>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
+            <Tooltip title="profile">
+              <Box onClick={handleOpenUserMenu}>
+                <img
+                  style={{
+                    cursor: "pointer",
+                    height: "40px",
+                    width: "40px",
+                    borderRadius: "50%",
+                  }}
+                  src={
+                    profileInfo?.profile_image
+                      ? `http://127.0.0.1:8000/${profileInfo?.profile_image}`
+                      : alterImage
+                  }
+                  alt="header-img"
+                />
+              </Box>
             </Tooltip>
 
             <Menu
@@ -270,11 +301,26 @@ const Header = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
+              <MenuItem onClick={handleCloseUserMenu}>
+                <Typography textAlign="center">
+                  <Link
+                    to={`profile/${profileInfo?.user_name}`}
+                    style={{ color: "#4B5563", textDecoration: "none" }}
+                  >
+                    Profile
+                  </Link>
+                </Typography>
+              </MenuItem>
+              <MenuItem onClick={handleCloseUserMenu}>
+                <Typography textAlign="center">
+                  <Link
+                    to="/auth/logout"
+                    style={{ color: "#4B5563", textDecoration: "none" }}
+                  >
+                    Logout
+                  </Link>
+                </Typography>
+              </MenuItem>
             </Menu>
           </Box>
         </Toolbar>

@@ -9,6 +9,6 @@ class LimitOffsetPagination(LimitOffsetPagination):
 
 
 class PageNumberPagination(PageNumberPagination):
-    page_size = 9
+    page_size = 8
     page_query_param = "p"
-    max_page_size = 20
+    max_page_size = 15
