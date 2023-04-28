@@ -71,8 +71,8 @@ It is a full-stack blog web application built with React on the frontend and Dja
 
 
 ## ERD Visualized <a name="erd-vis"></a>
+![Blog (1)](https://user-images.githubusercontent.com/50201920/235182915-308341b6-1e4d-43d0-b855-71ec73a48b9c.jpeg)
 
-![](readme-res//erd-vis.png)
 
 ## Screenshots <a name="screenshots"></a>
 ![](doc//p1.png)
